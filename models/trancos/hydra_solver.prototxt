@@ -1,0 +1,15 @@
+net: "configs/cnn_trancos/hidra_train_val.prototxt"
+test_iter: 100
+test_interval: 500
+base_lr: 0.0001
+lr_policy: "inv"
+power: 0.75
+gamma: 0.001
+stepsize: 1000
+display: 20
+max_iter: 30000
+momentum: 0.9
+weight_decay: 0.001
+snapshot: 2500
+snapshot_prefix: "genfiles/models/trancos_cnn"
+solver_mode: GPU
