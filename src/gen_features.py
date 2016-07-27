@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 '''
     @author: Daniel Oñoro Rubio
     @organization: GRAM, University of Alcalá, Alcalá de Henares, Spain
-    @copyright: 
+    @copyright: See LICENSE.txt
     @contact: daniel.onoro@edu.uah.es
     @date: 26/02/2015
 '''
@@ -16,14 +17,8 @@ the necessary files to perform a train.
 #===========================================================================
 # Dependency loading
 #===========================================================================
-
-# Parallel computing
-from joblib import Parallel, delayed  
-import multiprocessing
-
 # System
 import sys, getopt
-import time
 
 # File storage
 import h5py
@@ -417,7 +412,6 @@ def main(argv):
                 print "Creating dataset: ", dataset_name
                 f.create_dataset(dataset_name, data=trasposeImages(patches_list[:,s,...]), **comp_kwargs)
             f.close()
-
     
     print "--------------------"    
     print "Finish!"

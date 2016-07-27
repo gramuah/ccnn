@@ -1,14 +1,22 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 '''
     @author: Daniel Oñoro Rubio
+    @organization: GRAM, University of Alcalá, Alcalá de Henares, Spain
+    @copyright: See LICENSE.txt
     @contact: daniel.onoro@edu.uah.es
     @date: 27/02/2015
 '''
+
+"""
+Test script. This code performs a test over with a pre trained model over the
+specified dataset.
+"""
+
 #===========================================================================
 # Dependency loading
 #===========================================================================
-
 # File storage
 import h5py
 import scipy.io as sio
@@ -18,62 +26,34 @@ import signal
 import sys, getopt
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 import time
-import glob
+
 # Vision and maths
 import numpy as np
-from math import floor
 from utils import *
-from gen_features import genDensity, loadImage, zoomSingleIm
+from gen_features import genDensity, genPDensity, loadImage, extractEscales
 import caffe
-from sklearn.ensemble import ExtraTreesRegressor
-
-# Plotting
-import matplotlib.pyplot as plt
-
 import cv2
+
+# Config params
+from config import cfg
 
 #===========================================================================
 # Code 
 #===========================================================================
 class CaffePredictor:
-    def __init__(self, prototxt, caffemodel, meanimg):
-        # Use CPU
-#        caffe.set_mode_cpu()
-        # Use GPU
-        caffe.set_mode_gpu()
-        
+    def __init__(self, prototxt, caffemodel, n_scales):       
         # Load a precomputed caffe model
         self.net = caffe.Net(prototxt, caffemodel, caffe.TEST)
         
         # input preprocessing: 'data' is the name of the input blob == net.inputs[0]
         self.transformer = caffe.io.Transformer({'data': self.net.blobs['data_s0'].data.shape})
         self.transformer.set_transpose('data', (2, 0, 1)) # It's already RGB
-#         self.transformer.set_mean('data', np.load(meanimg).mean(1).mean(1))  # mean pixel
-#         self.transformer.set_raw_scale('data', 255)  # the reference model operates on images in [0,255] range instead of [0,1]
-#         self.transformer.set_channel_swap('data', (2, 1, 0))  # the reference model has channels in BGR order instead of RGB
         # Reshape net for the single input
         b_shape = self.net.blobs['data_s0'].data.shape
-        self.net.blobs['data_s0'].reshape(b_shape[0],b_shape[1],b_shape[2],b_shape[3])
-        self.net.blobs['data_s1'].reshape(b_shape[0],b_shape[1],b_shape[2],b_shape[3])
-
-    # take an array of shape (n, height, width) or (n, height, width, channels)
-    # and visualize each (height, width) thing in a grid of size approx. sqrt(n) by sqrt(n)
-    def vis_square(self, data, padsize=1, padval=0):
-        data -= data.min()
-        data /= data.max()
-        
-        # force the number of filters to be square
-        n = int(np.ceil(np.sqrt(data.shape[0])))
-        padding = ((0, n ** 2 - data.shape[0]), (0, padsize), (0, padsize)) + ((0, 0),) * (data.ndim - 3)
-        data = np.pad(data, padding, mode='constant', constant_values=(padval, padval))
-        
-        # tile the filters into an image
-        data = data.reshape((n, n) + data.shape[1:]).transpose((0, 2, 1, 3) + tuple(range(4, data.ndim + 1)))
-        data = data.reshape((n * data.shape[1], n * data.shape[3]) + data.shape[4:])
-        
-        plt.imshow(data)
-        plt.show()
-
+        self._n_scales = n_scales
+        for s in range(n_scales):
+            scale_name = 'data_s{}'.format(s)
+            self.net.blobs[scale_name].reshape(b_shape[0],b_shape[1],b_shape[2],b_shape[3])
 
     # Probably it is not the eficient way to do it...
     def process(self, im, base_pw):
@@ -85,100 +65,63 @@ class CaffePredictor:
         dens_map = np.zeros( (heith, width), dtype = np.float32 )   # Init density to 0
         count_map = np.zeros( (heith, width), dtype = np.int32 )     # Number of votes to divide
         
-        # draw patches size
-        rois = np.zeros( (heith, width, 3), np.uint8 ) 
-        
         # Iterate for all patches
-        for p in pos:
+        for ix, p in enumerate(pos):
             # Compute displacement from centers
             dx=dy=int(base_pw/2)
     
+            # Get roi
             x,y=p
             sx=slice(x-dx,x+dx+1,None)
             sy=slice(y-dy,y+dy+1,None)
-            
             crop_im=im[sx,sy,...]
-    
-            # Draw squares
-            color = np.random.randint(0,255,size = 3)
-            cv2.rectangle(rois, (y-dy, x-dx), (y+dy, x+dx), color, 1)
-    
-    #         print crop_im.shape
             h, w = crop_im.shape[0:2]
-    
             if h!=w or (h<=0):
-    #             print "Patch out of boundaries: ", h, w
                 continue
             
-            zoom_im = zoomSingleIm(crop_im)
+            # Get all the scaled images
+            im_scales = extractEscales([crop_im], self._n_scales)
             
             # Load and forward CNN
-            self.net.blobs['data_s0'].data[...] = self.transformer.preprocess('data', crop_im.copy())
-            self.net.blobs['data_s1'].data[...] = self.transformer.preprocess('data', zoom_im.copy())
+            for s in range(self._n_scales):
+                data_name = 'data_s{}'.format(s)
+                self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
             self.net.forward()
             
-#             print self.net.blobs['data'].data[0].shape
-#             plt.imshow(self.net.blobs['data'].data[0,0], cmap='gray')
-#             plt.show()
-            
-#             plt.subplot(1,2,1)
-#             plt.imshow(self.transformer.deprocess('data', self.net.blobs['data'].data[0]))
-#             plt.subplot(1,2,2)
-#             self.vis_square(self.net.blobs['conv1'].data[0, :36], padsize=1, padval=0)
-
             # Take the output from the last layer
             # Access to the last layer of the net, second element of the tuple (layer, caffe obj)
             pred = self.net.blobs.items()[-1][1].data
-#             pred = np.ones( 18*18 ) / 324.0 * pred
-
-#             pred = self.net.blobs['fc6'].data
             
             # Make it squared
             p_side = int(np.sqrt( len( pred.flatten() ) )) 
             pred = pred.reshape(  (p_side, p_side) )
             
             # Resize it back to the original size
-            pred = resizeDensityPatch(pred, crop_im.shape[0:2])
-            
+            pred = resizeDensityPatch(pred, crop_im.shape[0:2])          
             pred[pred<0] = 0
-        
-#             print pred.sum()
-        
-#             print pred.sum()
+
             # Sumup density map into density map and increase count of votes
             dens_map[sx,sy] += pred
             count_map[sx,sy] += 1
-
-#         plt.imshow(dens_map)
-#         plt.show()
-
-#         plt.imshow(rois)
-#         plt.show()
 
         # Remove Zeros
         count_map[ count_map == 0 ] = 1
 
         # Average density map
         dens_map = dens_map / count_map        
-         
-#         plt.subplot(1,2,1)
-#         plt.imshow(dens_map)
-#         plt.subplot(1,2,2)
-#         plt.imshow(count_map)
-#         plt.show()        
         
         return dens_map
         
-'''
+def gameRec(test, gt, cur_lvl, tar_lvl):
+    '''
     @brief: Compute the game metric error. Recursive function.
     @param test: test density.
     @param gt: ground truth density.
     @param cur_lvl: current game level.
     @param tar_lvl: target game level.
     @return game: return game metric.
-'''
-def gameRec(test, gt, cur_lvl, tar_lvl):
-    
+    '''
+        
     # get sizes
     dim = test.shape
     
@@ -236,18 +179,6 @@ def testOnImg(CNN, im, gtdots, pw, mask = None):
     npred=resImg.sum()
     ntrue=gtdots.sum()
 
-    # Visualize
-#    plt.subplot(1,3,1)
-#    plt.imshow(im)
-#    plt.title("Raw")
-#    plt.subplot(1,3,2)
-#    plt.imshow(resImg)
-#    plt.title("Prediction")
-#    plt.subplot(1,3,3)
-#    plt.imshow(gtdots)
-#    plt.title("Ground truth")
-#    plt.show()
-
     return ntrue,npred,resImg,gtdots
 
 def dispHelp(arg0):
@@ -255,6 +186,8 @@ def dispHelp(arg0):
     print "                       Usage"
     print "======================================================"
     print "\t-h display this message"
+    print "\t--cpu_only"
+    print "\t--tdev <GPU ID>"
     print "\t--tfeat <test features file>"
     print "\t--imfolder <test image folder>"
     print "\t--timnames <test image names txt file>"
@@ -265,47 +198,52 @@ def dispHelp(arg0):
     print "\t--pw <patch size. Default 7>"
     print "\t--nr <number of patches per image. Default 500>"
     print "\t--sig <sigma for the density images. Default 2.5>"
+    print "\t--n_scales <number of different scales to extract form each patch>"
     print "\t--prototxt <caffe prototxt file>"
     print "\t--caffemodel <caffe caffemodel file>"
     print "\t--meanim <mean image npy file>"
     print "\t--pmap <perspective file>"
-
+    print "\t--use_perspective <enable perspective usage>"
 
 def main(argv):      
+    use_cpu = False
+    gpu_dev = 0
+    
     # Set default values
-    # Use mask
-    use_mask = False
+    use_mask = cfg.TRANCOS.USE_MASK
+    use_perspective = cfg.TRANCOS.USE_PERSPECTIVE
     
     # Mask pattern ending
-    mask_ending = 'mask.mat'
-    
+    mask_ending = cfg.TRANCOS.MASK_ENDING
+        
     # Img patterns ending
-    dot_ending = 'dots.png'
+    dot_ending = cfg.TRANCOS.DOT_ENDING
     
     # Test vars
-    test_names_file = './data/TRANCOS/image_sets/quick_validation.txt'
+    test_names_file = cfg.TRANCOS.TEST_LIST
     
     # Im folder
-    im_folder = './data/TRANCOS/images/'
+    im_folder = cfg.TRANCOS.IM_FOLDER
     
     # Batch size
     b_size = -1
 
     # CNN vars
-    prototxt_path = './configs/cnn_trancos/tmp_deploy.prototxt'
-    caffemodel_path = './genfiles/models/sig_trancos_cnn_iter_1000.caffemodel'
-    mean_im_path = './genfiles/trancos_mean.npy'
+    prototxt_path = 'models/trancos/hydra2/hydra_deploy.prototxt'
+    caffemodel_path = 'models/trancos/hydra2/trancos_hydra2.caffemodel'
 
     # Patch parameters
-    pw=115 # Patch with 
-    sigmadots = 15.0 # Densities sigma
+    pw = cfg.TRANCOS.PW # Patch with 
+    sigmadots = cfg.TRANCOS.SIG # Densities sigma
     mx_game = 4 # Max game target
+    n_scales = cfg.TRANCOS.N_SCALES # Escales to extract
+    perspective_path = cfg.TRANCOS.PERSPECTIVE_MAP
         
     # Get parameters
     try:
         opts, _ = getopt.getopt(argv, "h:", ["imfolder=", "timnames=", 
-            "dending=", "pw=", "sig=", "usemask", "mask=",
-            "prototxt=", "caffemodel=", "meanim="])
+            "dending=", "pw=", "sig=", "n_scales=", "usemask", "mask=",
+            "prototxt=", "caffemodel=", "meanim=", "pmap=", "use_perspective", "cpu_only", "dev="])
     except getopt.GetoptError as err:
         print "Error while parsing parameters: ", err
         dispHelp(argv[0])
@@ -329,25 +267,37 @@ def main(argv):
             pw = int(arg)
         elif opt in ("--sig"):
             sigmadots = float(arg)
+        elif opt in ("--n_scales"):
+            n_scales = int(arg)
         elif opt in ("--prototxt"):
             prototxt_path = arg
         elif opt in ("--caffemodel"):
             caffemodel_path = arg
-        elif opt in ("--meanim"):
-            mean_im_path = arg
-    
+        elif opt in ("--pmap"):
+            perspective_path = arg
+        elif opt in ("--use_perspective"):
+            use_perspective = True
+        elif opt in ("--cpu_only"):
+            use_cpu = True            
+        elif opt in ("--dev"):
+            gpu_dev = int(arg)
+            
     print "Choosen parameters:"
     print "-------------------"
+    print "Use only CPU: ", use_cpu
+    print "GPU devide: ", gpu_dev
     print "Test data base location: ", im_folder
     print "Test inmage names: ", test_names_file
     print "Dot image ending: ", dot_ending
     print "Use mask: ", use_mask
-    print "Mask path: ", mask_ending
+    print "Mask ending: ", mask_ending
     print "Patch width (pw): ", pw
     print "Sigma for each dot: ", sigmadots
+    print "Number of scales: ", n_scales
+    print "Perspective map: ", perspective_path
+    print "Use perspective:", use_perspective
     print "Prototxt path: ", prototxt_path
     print "Caffemodel path: ", caffemodel_path
-    print "Mean image path: ", mean_im_path
     print "Batch size: ", b_size
     print "==================="
     
@@ -355,6 +305,20 @@ def main(argv):
     print "Preparing for Testing"
     print "======================"
 
+    # Set GPU CPU setting
+    if use_cpu:
+        caffe.set_mode_cpu()
+    else:
+        # Use GPU
+        caffe.set_device(gpu_dev)
+        caffe.set_mode_gpu()
+
+    print "Reading perspective file"
+    if use_perspective:
+        pers_file = h5py.File(perspective_path,'r')
+        pmap = np.array( pers_file['pmap'] ).T
+        pers_file.close()
+    
     print "Reading image file names:"
     im_names = np.loadtxt(test_names_file, dtype='str')
 
@@ -367,14 +331,14 @@ def main(argv):
     game_table = np.zeros( (n_im, mx_game) )
     
     # Init CNN
-    CNN = CaffePredictor(prototxt_path, caffemodel_path, mean_im_path)
+    CNN = CaffePredictor(prototxt_path, caffemodel_path, n_scales)
     
     print 
     print "Start prediction ..."
     count = 0
     gt_vector = np.zeros((len(im_names)))
-    pred_vector = np.zeros((len(im_names)))
-
+    pred_vector = np.zeros((len(im_names)))    
+    
     for ix, name in enumerate(im_names):
         # Get image paths
         im_path = extendName(name, im_folder)
@@ -382,11 +346,15 @@ def main(argv):
 
         # Read image files
         im = loadImage(im_path, color = True)
-        dot_im = vigra.impex.readImage(dot_im_path).view(np.ndarray).swapaxes(0, 1).squeeze()
+        dot_im = loadImage(dot_im_path, color = True)
         
         # Generate features
-        dens_im = genDensity(dot_im, sigmadots)
+        if use_perspective:
+            dens_im = genPDensity(dot_im, sigmadots, pmap)
+        else:
+            dens_im = genDensity(dot_im, sigmadots)
         
+        # Get mask if needed
         mask = None
         if use_mask:
             mask_im_path = extendName(name, im_folder, use_ending=True, pattern=mask_ending)
@@ -397,25 +365,9 @@ def main(argv):
         ntrue,npred,resImg,gtdots=testOnImg(CNN, im, dens_im, pw, mask)
         print "image : %d , ntrue = %.2f ,npred = %.2f , time =%.2f sec"%(count,ntrue,npred,time.time()-s)
     
-#        plt.subplot(1,3,1)
-#        plt.imshow(im)
-#        plt.title("Input Image", color='white')
-#        plt.axis('off')
-#        plt.subplot(1,3,2)
-#        plt.imshow(resImg)
-#        plt.title("Hydra pred.= %.1f"%npred, color='white')
-#        plt.axis('off')
-#        plt.subplot(1,3,3)
-#        plt.imshow(gtdots)
-#        plt.title("Ground truth = %.1f"%ntrue, color='white')
-#        plt.axis('off')
-#        
-##        plt.show()
-#        plt.savefig('genfiles/images/%.3d.png'%(ix), bbox_inches='tight', facecolor='black')
-
+        # Keep individual predictions
         gt_vector[ix] = ntrue
-        pred_vector[ix] = npred
-    
+        pred_vector[ix] = npred    
     
         # Hold predictions and originasl
         ntrueall.append(ntrue)
@@ -433,13 +385,17 @@ def main(argv):
     print "done ! mean absolute error %.2f" % np.mean(np.abs(ntrueall-npredall))
 
     # Print Game results
+    results = np.zeros(mx_game)
     for l in range(mx_game):
+        results[l] = np.mean( game_table[:,l] )
         print "GAME for level %d: %.2f " % (l, np.mean( game_table[:,l] ))
     
-    np.save('up_gt2.npy',gt_vector)
-    np.save('up_pred2.npy',pred_vector)
-    
-    return game_table.mean(axis=0)
+    res_file = test_names_file[:-4] + '.npy'
+    if os.path.isfile(res_file):
+        prev_res = np.load(res_file)
+        results = np.vstack( (prev_res, results) )
+
+    return 0
 
 if __name__=="__main__":
     main(sys.argv[1:])

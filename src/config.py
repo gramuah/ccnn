@@ -36,7 +36,8 @@ __C.TRANCOS.MASK_ENDING="mask.mat"
 __C.TRANCOS.PW=115            # Base patch side
 __C.TRANCOS.NR=800            # < 1 = dense extraction
 __C.TRANCOS.SIG=15.0        
-__C.TRANCOS.SPLIT=75            # Create a new file every X images
+__C.TRANCOS.SPLIT=75          # Create a new file every X images
+__C.TRANCOS.USE_MASK=True
 __C.TRANCOS.FLIP=True
 __C.TRANCOS.USE_PERSPECTIVE=False
 
@@ -48,6 +49,7 @@ __C.TRANCOS.IM_FOLDER='data/TRANCOS/images/'
 __C.TRANCOS.TRAINING_LIST='data/TRANCOS/image_sets/training.txt'
 __C.TRANCOS.VALIDATION_LIST='data/TRANCOS/image_sets/validation.txt'
 __C.TRANCOS.TRAINVAL_LIST='data/TRANCOS/image_sets/trainval.txt'
+__C.TRANCOS.TEST_LIST='data/TRANCOS/image_sets/test.txt'
 __C.TRANCOS.PERSPECTIVE_MAP=''
 
 # CNN model params
