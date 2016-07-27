@@ -36,7 +36,7 @@ __C.TRANCOS.MASK_ENDING="mask.mat"
 __C.TRANCOS.PW=115            # Base patch side
 __C.TRANCOS.NR=800            # < 1 = dense extraction
 __C.TRANCOS.SIG=15.0        
-__C.TRANCOS.SPLIT=75          # Create a new file every X images
+__C.TRANCOS.SPLIT=15          # Create a new file every X images
 __C.TRANCOS.USE_MASK=True
 __C.TRANCOS.FLIP=True
 __C.TRANCOS.USE_PERSPECTIVE=False

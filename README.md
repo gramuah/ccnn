@@ -11,14 +11,13 @@ Blablabla
 
 ### Cite us
 
-If you find Faster R-CNN useful in your research, please consider citing:
+If you find our work useful, please cite us:
 
-    @inproceedings{renNIPS15fasterrcnn,
-        Author = {Shaoqing Ren and Kaiming He and Ross Girshick and Jian Sun},
-        Title = {Faster {R-CNN}: Towards Real-Time Object Detection
-                 with Region Proposal Networks},
-        Booktitle = {Advances in Neural Information Processing Systems ({NIPS})},
-        Year = {2015}
+    @inproceedings{onoro2016,
+        Author = {O\~noro-Rubio, D. and L\'opez-Sastre, R.},
+        Title = {Towards perspective-free object counting with deep learning},
+        Booktitle = {ECCV},
+        Year = {2016}
     }
 
 ### Contents
