@@ -25,7 +25,6 @@ import caffe
 from skimage.transform import resize
 
 # Others
-import utils
 import test as tst
 import gen_features as gfeat
 
@@ -82,49 +81,49 @@ def main(argv):
         game = np.zeros( (n_exp, 4) )
     
     for i in range(start, n_exp):
-#         # Generate Training Features
-#         gen_feat_params = ['--imfolder', DATA + '/images', '--output', GENFILES + '/'+ TRAIN_FEAT,
-#                            '--names', DATA + '/image_sets/training.txt',
-#                            '--ending', DOT_ENDING, '--pw_base', PW, '--pw_norm',
-#                            CNN_PW_IN, '--pw_dens',CNN_PW_OUT, '--sig', SIG, '--nr', NR,
-#                            '--split', SPLIT, FLIP]
-#         gfeat.main( gen_feat_params )
-#         training_data_files = glob.glob(GENFILES + '/' + TRAIN_FEAT + '*.h5')
-#         with open(GENFILES + '/data/aux_train.txt','w') as f:
-#             for fname in training_data_files:
-#                 f.write(fname + '\n')
-#             f.close()
-#            
-#         # Generate Training Features
-#         gen_feat_params = ['--imfolder', DATA + '/images', '--output', GENFILES + '/'+ VAL_FEAT,
-#                            '--names', DATA + '/image_sets/validation.txt',
-#                            '--ending', DOT_ENDING, '--pw_base', PW, '--pw_norm',
-#                            CNN_PW_IN, '--pw_dens',CNN_PW_OUT, '--sig', SIG, '--nr', NR,
-#                            '--split', SPLIT, FLIP]
-#         gfeat.main( gen_feat_params )    
-#         testing_data_files = glob.glob(GENFILES + '/' + VAL_FEAT + '*.h5')
-#         with open(GENFILES + '/data/aux_test.txt','w') as f:
-#             for fname in testing_data_files:
-#                 f.write(fname + '\n')
-#             f.close()
-#           
-#         # All training dataset
-#         all_train_data_files = training_data_files + testing_data_files
-#         with open(GENFILES + '/data/train.txt','w') as f:
-#             for fname in all_train_data_files:
-#                 f.write(fname + '\n')
-#             f.close()
-#          
-#         # Train CNN
-#         tnt = 10   # Count down
-#         while not train_cnn(CONFIGS + '/' + SOLVER) and tnt > 0:
-#             tnt -= 1
-#             
-#         if tnt <= 0:
-#             print "Could not train CNN. It explodes!"
-#             continue
-#         
-#         os.system("cp " + GENFILES + '/' + CAFFEMODEL + ' ' + GENFILES + '/' + CAFFEMODEL + "_" + str(i) )
+        # Generate Training Features
+        gen_feat_params = ['--imfolder', DATA + '/images', '--output', GENFILES + '/'+ TRAIN_FEAT,
+                           '--names', DATA + '/image_sets/training.txt',
+                           '--ending', DOT_ENDING, '--pw_base', PW, '--pw_norm',
+                           CNN_PW_IN, '--pw_dens',CNN_PW_OUT, '--sig', SIG, '--nr', NR,
+                           '--split', SPLIT, FLIP]
+        gfeat.main( gen_feat_params )
+        training_data_files = glob.glob(GENFILES + '/' + TRAIN_FEAT + '*.h5')
+        with open(GENFILES + '/data/aux_train.txt','w') as f:
+            for fname in training_data_files:
+                f.write(fname + '\n')
+            f.close()
+            
+        # Generate Training Features
+        gen_feat_params = ['--imfolder', DATA + '/images', '--output', GENFILES + '/'+ VAL_FEAT,
+                           '--names', DATA + '/image_sets/validation.txt',
+                           '--ending', DOT_ENDING, '--pw_base', PW, '--pw_norm',
+                           CNN_PW_IN, '--pw_dens',CNN_PW_OUT, '--sig', SIG, '--nr', NR,
+                           '--split', SPLIT, FLIP]
+        gfeat.main( gen_feat_params )    
+        testing_data_files = glob.glob(GENFILES + '/' + VAL_FEAT + '*.h5')
+        with open(GENFILES + '/data/aux_test.txt','w') as f:
+            for fname in testing_data_files:
+                f.write(fname + '\n')
+            f.close()
+           
+        # All training dataset
+        all_train_data_files = training_data_files + testing_data_files
+        with open(GENFILES + '/data/train.txt','w') as f:
+            for fname in all_train_data_files:
+                f.write(fname + '\n')
+            f.close()
+          
+        # Train CNN
+        tnt = 10   # Count down
+        while not train_cnn(CONFIGS + '/' + SOLVER) and tnt > 0:
+            tnt -= 1
+             
+        if tnt <= 0:
+            print "Could not train CNN. It explodes!"
+            continue
+         
+        os.system("cp " + GENFILES + '/' + CAFFEMODEL + ' ' + GENFILES + '/' + CAFFEMODEL + "_" + str(i) )
         
         # Test
         g = tst.main( ['--imfolder', DATA + '/images', '--timnames', DATA + '/image_sets/test.txt',

@@ -2,9 +2,16 @@
 
 '''
     @author: Daniel Oñoro Rubio
+    @organization: GRAM, University of Alcalá, Alcalá de Henares, Spain
+    @copyright: 
     @contact: daniel.onoro@edu.uah.es
     @date: 26/02/2015
 '''
+
+"""
+Feature files generator. This code read the specified database and creates all
+the necessary files to perform a train.
+"""
 
 #===========================================================================
 # Dependency loading
@@ -13,7 +20,6 @@
 # Parallel computing
 from joblib import Parallel, delayed  
 import multiprocessing
-import caffe.io as cio
 
 # System
 import sys, getopt
@@ -21,39 +27,35 @@ import time
 
 # File storage
 import h5py
-import scipy.io as sio
 
 # Vision and maths
-import vigra
 import numpy as np
-from utils import *
+import utils as utl 
 import skimage.io
 from scipy.ndimage.filters import gaussian_filter 
 from skimage.transform import resize
 
-# Plotting
-import matplotlib.pyplot as plt
-
+# Config params
+from config import cfg
 
 #===========================================================================
 # Code 
 #===========================================================================
 
-'''
-    @brief: This function gets a dotted image and returns its density map.
-    @param dots: annotated dot image.
-    @param sigmadots: density radius.
-    @return: density map for the input dots image.
-'''
 def genDensity(dot_im, sigmadots):
+    '''
+    @brief: This function gets a dotted image and returns its density map.
+    @param: dots: annotated dot image.
+    @param: sigmadots: density radius.
+    @return: density map for the input dots image.
+    '''
+    
     # Take only red channel
     dot = dot_im[:, :, 0]
-    
-    # print dot.max(),dot.min()
-    dot /= 255
-    dot = vigra.filters.gaussianSmoothing(dot, sigmadots).squeeze()
+    dot = gaussian_filter(dot, sigmadots)
         
-    return dot.view(np.ndarray).astype(np.float32)
+    return dot.astype(np.float32)
+
 
 '''
     @brief: This function gets a dotted image and returns its density map 
@@ -174,22 +176,26 @@ def hFlipImages(lim):
     
     return flim
 
-def zoomSingleIm(i):
-    h,w,_ = i.shape
-    crop = i[h/4:3*h/4, w/4:3*w/4]
-    return resize(crop, (h,w))
-    
 
-def zoomImages(lim):
+def extractEscales(lim, n_scales):
     '''
-    @brief: Crop and return a 50% zoomed image list.
+    @brief: Crop and return n_scaled patches.
     '''
-    opt_list = []
-    for i in lim:
-        res = zoomSingleIm(i)
-        opt_list.append( res.copy() )
+    out_list = []
+    for im in lim:
+        ph, pw = im.shape[0:2] # get patch width and height
+        scaled_im_list = []
+        for s in range(n_scales):
+            ch = s * ph / (2*n_scales)
+            cw = s * pw / (2*n_scales)
+            
+            crop_im = im[ch:ph-ch, cw:pw - cw]
+            
+            scaled_im_list.append(resize(crop_im, (ph,pw)))
         
-    return opt_list
+        out_list.append(scaled_im_list)
+        
+    return out_list
 
 def dispHelp():
     print "======================================================"
@@ -205,35 +211,39 @@ def dispHelp():
     print "\t--pw_dens <density patch width>"
     print "\t--nr <number of patches per image. Default 500. If it is lower than 1 it will be performed a dense extraction>"
     print "\t--sig <sigma for the density images. Default 2.5>"
+    print "\t--pmap <perspective file>"
+    print "\t--use_perspective <enable perspective usage>"
+    print "\t--n_scales <number of different scales to extract form each patch>"
     print "\t--split <split the data in files with the specified size>"
     print "\t--flip <add an horizon flipped copy>"
-
     
 def main(argv):
-    
     # Set default values
-    im_folder = './data/UCSD/images/'
-    output_file = './genfiles/train_data'
-    im_list_file = './data/UCSD/image_sets/training_downscale.txt'
+    im_folder = cfg.TRANCOS.IM_FOLDER
+    im_list_file = cfg.TRANCOS.TRAINVAL_LIST
+    output_file = cfg.TRANCOS.VAL_FEAT
     
     # Img patterns
-    dot_ending = 'dots.png'
+    dot_ending = cfg.TRANCOS.DOT_ENDING
 
     # Features extraction vars
-    pw_base = 33  # Patch width 
-    pw_norm = 72  # Patch width
-    pw_dens = 18  # Patch width
-    sigmadots = 4.0  # Densities sigma
-    Nr = 800  # Number of patches extracted from the compute_mean images
+    pw_base = cfg.TRANCOS.PW  # Patch width 
+    pw_norm = cfg.TRANCOS.CNN_PW_IN  # Patch width
+    pw_dens = cfg.TRANCOS.CNN_PW_OUT  # Patch width
+    sigmadots = cfg.TRANCOS.SIG  # Densities sigma
+    Nr = cfg.TRANCOS.NR  # Number of patches extracted from the compute_mean images
+    n_scales = cfg.TRANCOS.N_SCALES        # Number of scales
     
     # Others
-    split_size = 5
-    do_flip = False
+    split_size = cfg.TRANCOS.SPLIT
+    do_flip = cfg.TRANCOS.FLIP
+    perspective_path = cfg.TRANCOS.USE_PERSPECTIVE
+    use_perspective = cfg.TRANCOS.PERSPECTIVE_MAP
     
     # Get parameters
     try:
         opts, _ = getopt.getopt(argv, "h:", ["imfolder=", "output=", "names=",
-          "ending=", "pw_base=", "pw_norm=", "pw_dens=", "sig=", "nr=", "meanim=", "split=", "flip"])
+          "ending=", "pw_base=", "pw_norm=", "pw_dens=", "sig=", "nr=", "n_scales=", "meanim=", "split=", "flip", "use_perspective", "pmap="])
     except getopt.GetoptError:
         dispHelp()
         return
@@ -258,12 +268,19 @@ def main(argv):
             pw_dens = int(arg)
         elif opt in ("--nr"):
             Nr = int(arg)
+        elif opt in ("--n_scales"):
+            n_scales = int(arg)
         elif opt in ("--sig"):
             sigmadots = float(arg)
         elif opt in ("--split"):
             split_size = int(arg)
         elif opt in ("--flip"):
             do_flip = True
+        elif opt in ("--use_perspective"):
+            use_perspective = True
+        elif opt in ("--pmap"):
+            perspective_path = arg
+            
     
     print "Choosen parameters:"
     print "-------------------"
@@ -275,35 +292,47 @@ def main(argv):
     print "Patch width (pw_norm): ", pw_norm
     print "Patch width (pw_dens): ", pw_dens
     print "Number of patches per image: ", Nr
+    print "Perspective map: ", perspective_path
+    print "Use perspective:", use_perspective
     print "Sigma for each dot: ", sigmadots
+    print "Number of scales: ", n_scales
     print "Split size: ", split_size
     print "Flip images: ", do_flip
     print "==================="
+    
+    print "Reading perspective file"
+    if use_perspective:
+        pers_file = h5py.File(perspective_path,'r')
+        pmap = np.array( pers_file['pmap'] ).T
+        pers_file.close()
     
     print "Reading image file names:"
     im_names = np.loadtxt(im_list_file, dtype='str')
 
     ldens = []
     lpos = []
-    lpatches0 = []
-    lpatches1 = []
+    lpatches = []
     file_count = 0
     for ix, name in enumerate(im_names):
         print "Processing image: ", name
         # Get image paths
-        im_path = extendName(name, im_folder)
-        dot_im_path = extendName(name, im_folder, use_ending=True, pattern=dot_ending)
+        im_path = utl.extendName(name, im_folder)
+        dot_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=dot_ending)
         
         # Read image files
         im = loadImage(im_path, color = True)
-        dot_im = vigra.impex.readImage(dot_im_path).view(np.ndarray).swapaxes(0, 1).squeeze()
+        dot_im = loadImage(dot_im_path, color = True)
 
-        # Collect features from random locations
-        dens_im = genDensity(dot_im, sigmadots)
-        
+        # Do ground truth
+        if use_perspective:
+            dens_im = genPDensity(dot_im, sigmadots, pmap)
+        else:
+            dens_im = genDensity(dot_im, sigmadots)
+
+        # Collect features from random locations        
 #         height, width, _ = im.shape
 #         pos = get_dense_pos(height, width, pw_base=pw_base, stride = 5 )
-        pos = genRandomPos(im.shape, pw_base, Nr)
+        pos = utl.genRandomPos(im.shape, pw_base, Nr)
 
         # Collect original patches
         patch = cropAtPos(im, pos, pw_base)
@@ -314,60 +343,49 @@ def main(argv):
 #         dpatch = cropPerspective(dens_im, pos, pmap, pw_base)
         
         # Resize images
-        patch = resizePatches(patch, (pw_norm,pw_norm))
-        dpatch = resizeListDens(dpatch, (pw_dens, pw_dens)) # 18 is the output size of the paper
+        patch = utl.resizePatches(patch, (pw_norm,pw_norm))
+        dpatch = utl.resizeListDens(dpatch, (pw_dens, pw_dens)) # 18 is the output size of the paper
 
         # Flip function
         if do_flip:
             fpatch = hFlipImages(patch)
             fdpatch = hFlipImages(dpatch)
 
-            patch_half_flip = zoomImages(patch)
-            
+            fscales = extractEscales(fpatch, n_scales)
+
             # Add flipped data
-            lpatches0.append( fpatch )
-            lpatches1.append( patch_half_flip )
+            lpatches.append( fscales )
             ldens.append( fdpatch )
             lpos.append( pos )
 
         
-        patch_half = zoomImages(patch)
-        
-#         punrolled = []
-#         for p in dpatch:
-#             punrolled.append( np.array( p.ravel()[:,np.newaxis,np.newaxis] ) )
-         
-#         punrolled = np.vstack( punrolled )
-        
         # Store features and densities 
-#         ldens.append(punrolled)
         ldens.append( dpatch )
         lpos.append(pos)
-        lpatches0.append(patch)
-        lpatches1.append(patch_half)
+        lpatches.append( extractEscales(patch, n_scales) )
         
         # Save it into a file
         if split_size > 0 and (ix + 1) % split_size == 0:
             # Prepare for saving
             ldens = np.vstack(ldens)
             lpos = np.vstack(lpos)
-            lpatches0 = np.vstack(lpatches0)
-            lpatches1 = np.vstack(lpatches1)
-
-            lpatches0 = trasposeImages(lpatches0)
-            lpatches1 = trasposeImages(lpatches1)
+            patches_list = np.vstack(lpatches[:])
             
             opt_num_name = output_file + str(file_count) + ".h5"
             print "Saving data file: ", opt_num_name
-            print "Saving {} patches examples of {}".format(len(lpatches0), lpatches0[0].shape)
-            print "Saving {} densities examples of {}".format(len(ldens), ldens[0].shape)
+            print "Saving {} examples".format(len(ldens))
         
             # Compress data and save
             comp_kwargs = {'compression': 'gzip', 'compression_opts': 1}
             with h5py.File(opt_num_name, 'w') as f:
-                f.create_dataset('data_s0', data=lpatches0, **comp_kwargs)
-                f.create_dataset('data_s1', data=lpatches1, **comp_kwargs)
                 f.create_dataset('label', data=ldens, **comp_kwargs)
+                
+                # Save all scales data
+                for s in range(n_scales):
+                    dataset_name = 'data_s{}'.format(s) 
+                    print "Creating dataset: ", dataset_name
+                    f.create_dataset(dataset_name, data=trasposeImages(patches_list[:,s,...]), **comp_kwargs)
+                
                 f.close()
 
             # Increase file counter
@@ -376,31 +394,30 @@ def main(argv):
             # Clean memory
             ldens = []
             lpos = []
-            lpatches0 = []
-            lpatches1 = []
+            lpatches = []
     
     ## Last save
-    if len(lpatches0) >0:
+    if len(lpatches) >0:
         # Prepare for saving
         ldens = np.vstack(ldens)
         lpos = np.vstack(lpos)
-        lpatches0 = np.vstack(lpatches0)
-        lpatches1 = np.vstack(lpatches1)
+        patches_list = np.vstack(lpatches[:])
         
-        lpatches0 = trasposeImages(lpatches0)
-        lpatches1 = trasposeImages(lpatches1)
-        
-        print "Saving data..."
-        print "Saving {} patches examples of {}".format(len(lpatches0), lpatches0[0].shape)
-        print "Saving {} densities examples of {}".format(len(ldens), ldens[0].shape)
+        opt_num_name = output_file + ".h5"
+        print "Saving data file: ", opt_num_name
+        print "Saving {} examples".format(len(ldens))
     
         # Compress data and save
         comp_kwargs = {'compression': 'gzip', 'compression_opts': 1}
-        with h5py.File(output_file + '.h5', 'w') as f:
-            f.create_dataset('data_s0', data=lpatches0, **comp_kwargs)
-            f.create_dataset('data_s1', data=lpatches1, **comp_kwargs)
+        with h5py.File(opt_num_name, 'w') as f:
             f.create_dataset('label', data=ldens, **comp_kwargs)
+            # Save all scales data
+            for s in range(n_scales):
+                dataset_name = 'data_s{}'.format(s) 
+                print "Creating dataset: ", dataset_name
+                f.create_dataset(dataset_name, data=trasposeImages(patches_list[:,s,...]), **comp_kwargs)
             f.close()
+
     
     print "--------------------"    
     print "Finish!"
