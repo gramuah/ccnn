@@ -43,14 +43,14 @@ __C.TRANCOS.USE_PERSPECTIVE=False
 
 # Paths and others
 __C.TRANCOS.TRAINVAL_LIST='data/TRANCOS/image_sets/trainval.txt'
-__C.TRANCOS.TRAIN_FEAT='data/features/trancos_train_feat'
-__C.TRANCOS.VAL_FEAT='data/trancos_val_feat'
 __C.TRANCOS.IM_FOLDER='data/TRANCOS/images/'
 __C.TRANCOS.TRAINING_LIST='data/TRANCOS/image_sets/training.txt'
 __C.TRANCOS.VALIDATION_LIST='data/TRANCOS/image_sets/validation.txt'
 __C.TRANCOS.TRAINVAL_LIST='data/TRANCOS/image_sets/trainval.txt'
 __C.TRANCOS.TEST_LIST='data/TRANCOS/image_sets/test.txt'
 __C.TRANCOS.PERSPECTIVE_MAP=''
+__C.TRANCOS.TRAIN_FEAT='genfiles/features/trancos_train_feat'
+__C.TRANCOS.VAL_FEAT='genfiles/features/trancos_val_feat'
 
 # CNN model params
 __C.TRANCOS.CNN_PW_IN=72    # CNN patch width in

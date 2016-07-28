@@ -216,7 +216,7 @@ def main(argv):
     # Set default values
     im_folder = cfg.TRANCOS.IM_FOLDER
     im_list_file = cfg.TRANCOS.TRAINVAL_LIST
-    output_file = cfg.TRANCOS.VAL_FEAT
+    output_file = cfg.TRANCOS.TRAIN_FEAT
     
     # Img patterns
     dot_ending = cfg.TRANCOS.DOT_ENDING
@@ -412,6 +412,7 @@ def main(argv):
                 print "Creating dataset: ", dataset_name
                 f.create_dataset(dataset_name, data=trasposeImages(patches_list[:,s,...]), **comp_kwargs)
             f.close()
+
     
     print "--------------------"    
     print "Finish!"
