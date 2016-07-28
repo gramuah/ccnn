@@ -30,8 +30,6 @@ import skimage.io
 from scipy.ndimage.filters import gaussian_filter 
 from skimage.transform import resize
 
-# Config params
-from config import cfg
 
 #===========================================================================
 # Code 
@@ -171,7 +169,6 @@ def hFlipImages(lim):
     
     return flim
 
-
 def extractEscales(lim, n_scales):
     '''
     @brief: Crop and return n_scaled patches.
@@ -192,11 +189,59 @@ def extractEscales(lim, n_scales):
         
     return out_list
 
+def cfgFromFile(filename):
+    """Load a config file."""
+    import yaml
+    from easydict import EasyDict as edict
+    with open(filename, 'r') as f:
+        yaml_cfg = edict(yaml.load(f))
+
+    return yaml_cfg
+
+def initFromCfg(cfg_file):
+    '''
+    @brief: initialize all parameter from the cfg file. 
+    '''
+    
+    # Load cfg parameter from yaml file
+    cfg = cfgFromFile(cfg_file)
+    
+    # Fist load the dataset name
+    dataset = cfg.DATASET
+    
+    # Set values
+    im_folder = cfg[dataset].IM_FOLDER
+    im_list_file = cfg[dataset].TRAINVAL_LIST
+    output_file = cfg[dataset].TRAIN_FEAT
+    
+    # Img patterns
+    dot_ending = cfg[dataset].DOT_ENDING
+
+    # Features extraction vars
+    pw_base = cfg[dataset].PW  # Patch width 
+    pw_norm = cfg[dataset].CNN_PW_IN  # Patch width
+    pw_dens = cfg[dataset].CNN_PW_OUT  # Patch width
+    sigmadots = cfg[dataset].SIG  # Densities sigma
+    Nr = cfg[dataset].NR  # Number of patches extracted from the compute_mean images
+    n_scales = cfg[dataset].N_SCALES        # Number of scales
+    
+    # Others
+    split_size = cfg[dataset].SPLIT
+    do_flip = cfg[dataset].FLIP
+    perspective_path = cfg[dataset].USE_PERSPECTIVE
+    use_perspective = cfg[dataset].PERSPECTIVE_MAP
+
+        
+    return (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
+        pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
+        perspective_path, use_perspective)
+
 def dispHelp():
     print "======================================================"
     print "                       Usage"
     print "======================================================"
     print "\t-h display this message"
+    print "\t--cfg <config file yaml>"
     print "\t--imfolder <image folder>"
     print "\t--names <image names txt file>"
     print "\t--ending <dot image ending pattenr>"
@@ -211,34 +256,15 @@ def dispHelp():
     print "\t--n_scales <number of different scales to extract form each patch>"
     print "\t--split <split the data in files with the specified size>"
     print "\t--flip <add an horizon flipped copy>"
+    print "\t--dataset <dataset choice>"
     
 def main(argv):
-    # Set default values
-    im_folder = cfg.TRANCOS.IM_FOLDER
-    im_list_file = cfg.TRANCOS.TRAINVAL_LIST
-    output_file = cfg.TRANCOS.TRAIN_FEAT
-    
-    # Img patterns
-    dot_ending = cfg.TRANCOS.DOT_ENDING
-
-    # Features extraction vars
-    pw_base = cfg.TRANCOS.PW  # Patch width 
-    pw_norm = cfg.TRANCOS.CNN_PW_IN  # Patch width
-    pw_dens = cfg.TRANCOS.CNN_PW_OUT  # Patch width
-    sigmadots = cfg.TRANCOS.SIG  # Densities sigma
-    Nr = cfg.TRANCOS.NR  # Number of patches extracted from the compute_mean images
-    n_scales = cfg.TRANCOS.N_SCALES        # Number of scales
-    
-    # Others
-    split_size = cfg.TRANCOS.SPLIT
-    do_flip = cfg.TRANCOS.FLIP
-    perspective_path = cfg.TRANCOS.USE_PERSPECTIVE
-    use_perspective = cfg.TRANCOS.PERSPECTIVE_MAP
-    
     # Get parameters
     try:
         opts, _ = getopt.getopt(argv, "h:", ["imfolder=", "output=", "names=",
-          "ending=", "pw_base=", "pw_norm=", "pw_dens=", "sig=", "nr=", "n_scales=", "meanim=", "split=", "flip", "use_perspective", "pmap="])
+          "ending=", "pw_base=", "pw_norm=", "pw_dens=", "sig=", "nr=", 
+          "n_scales=", "meanim=", "split=", "flip", "use_perspective", "pmap=", 
+          "cfg=", "dataset="])
     except getopt.GetoptError:
         dispHelp()
         return
@@ -275,10 +301,21 @@ def main(argv):
             use_perspective = True
         elif opt in ("--pmap"):
             perspective_path = arg
+        elif opt in ("--cfg"):
+            cfg_file = arg
+        elif opt in ("--dataset"):
+            dataset = arg
             
+    if len(cfg_file) > 0:
+        print "Warning! a config file is set, all the other parameter will be overridden!"
+        (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
+        pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
+        perspective_path, use_perspective) = initFromCfg(cfg_file)
     
     print "Choosen parameters:"
     print "-------------------"
+    print "Dataset: ", dataset
+    print "Config file: ", cfg_file
     print "Data base location: ", im_folder
     print "Image names file: ", im_list_file 
     print "Output file:", output_file

@@ -34,8 +34,6 @@ from gen_features import genDensity, genPDensity, loadImage, extractEscales
 import caffe
 import cv2
 
-# Config params
-from config import cfg
 
 #===========================================================================
 # Code 

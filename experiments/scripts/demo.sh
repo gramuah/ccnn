@@ -12,15 +12,6 @@ echo Logging output to "$LOG"
 # Time the task
 T="$(date +%s)"
 
-# Generate Features
-python src/gen_features.py
-
-# Collect all the features into a txt file
-find `pwd`/genfiles/features/trancos_train_feat*.h5 > genfiles/features/train.txt
-
-# Train Net
-caffe train -solver models/trancos/ccnn/ccnn_solver.prototxt
-
 # Test Net
 python src/test.py
 
