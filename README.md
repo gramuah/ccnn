@@ -46,7 +46,7 @@ Was our code useful for you? Please cite us:
 
 This code allows the usage of CPU and GPU. We strongly recommend the usage the GPU due it is going to short the training and testing time by a factor of 10 or so.
 
-1. For training, we recommend to have a GPU with at least 3GB of memory.
+1. For training, we recommend having a GPU with at least 3GB of memory.
 
 2. For testing, a GPU with 2GB memory is enough.
 
