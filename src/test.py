@@ -211,11 +211,12 @@ def initTestFromCfg(cfg_file):
     sigmadots = cfg[dataset].SIG # Densities sigma
     n_scales = cfg[dataset].N_SCALES # Escales to extract
     perspective_path = cfg[dataset].PERSPECTIVE_MAP
+    is_colored = cfg[dataset].COLOR
 
         
     return (dataset, use_mask, mask_ending, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
-            use_perspective)
+            use_perspective, is_colored)
 
 
 def dispHelp(arg0):
@@ -272,7 +273,7 @@ def main(argv):
     print "Loading configuration file: ", cfg_file
     (dataset, use_mask, mask_ending, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
-            use_perspective) = initTestFromCfg(cfg_file)
+            use_perspective, is_colored) = initTestFromCfg(cfg_file)
             
     print "Choosen parameters:"
     print "-------------------"
@@ -338,7 +339,7 @@ def main(argv):
         dot_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=dot_ending)
 
         # Read image files
-        im = loadImage(im_path, color = True)
+        im = loadImage(im_path, color = is_colored)
         dot_im = loadImage(dot_im_path, color = True)
         
         # Generate features

@@ -3,6 +3,7 @@ TRANCOS:
   # Database params
   DOT_ENDING: 'dots.png'
   MASK_ENDING: 'mask.mat'
+  COLOR: True
 
   # Feature extraction params
   PW: 115            # Base patch side

@@ -221,11 +221,12 @@ def initGenFeatFromCfg(cfg_file):
     do_flip = cfg[dataset].FLIP
     perspective_path = cfg[dataset].USE_PERSPECTIVE
     use_perspective = cfg[dataset].PERSPECTIVE_MAP
+    is_colored = cfg[dataset].COLOR
 
         
     return (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
         pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
-        perspective_path, use_perspective)
+        perspective_path, use_perspective, is_colored)
 
 def dispHelp():
     print "======================================================"
@@ -255,7 +256,7 @@ def main(argv):
     print "Loading configuration file: ", cfg_file
     (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
     pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
-    perspective_path, use_perspective) = initGenFeatFromCfg(cfg_file)
+    perspective_path, use_perspective, is_colored) = initGenFeatFromCfg(cfg_file)
     
     print "Choosen parameters:"
     print "-------------------"
@@ -296,7 +297,7 @@ def main(argv):
         dot_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=dot_ending)
         
         # Read image files
-        im = loadImage(im_path, color = True)
+        im = loadImage(im_path, color = is_colored)
         dot_im = loadImage(dot_im_path, color = True)
 
         # Do ground truth
