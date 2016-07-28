@@ -5,6 +5,15 @@ import numpy as np
 import scipy.io
 from skimage.transform import resize
 
+def cfgFromFile(filename):
+    """Load a config file."""
+    import yaml
+    from easydict import EasyDict as edict
+    with open(filename, 'r') as f:
+        yaml_cfg = edict(yaml.load(f))
+
+    return yaml_cfg
+
 def cartesian(arrays, out=None):
     """
     Generate a cartesian product of input arrays.

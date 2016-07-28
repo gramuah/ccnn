@@ -189,22 +189,13 @@ def extractEscales(lim, n_scales):
         
     return out_list
 
-def cfgFromFile(filename):
-    """Load a config file."""
-    import yaml
-    from easydict import EasyDict as edict
-    with open(filename, 'r') as f:
-        yaml_cfg = edict(yaml.load(f))
-
-    return yaml_cfg
-
-def initFromCfg(cfg_file):
+def initGenFeatFromCfg(cfg_file):
     '''
     @brief: initialize all parameter from the cfg file. 
     '''
     
     # Load cfg parameter from yaml file
-    cfg = cfgFromFile(cfg_file)
+    cfg = utl.cfgFromFile(cfg_file)
     
     # Fist load the dataset name
     dataset = cfg.DATASET
@@ -242,29 +233,14 @@ def dispHelp():
     print "======================================================"
     print "\t-h display this message"
     print "\t--cfg <config file yaml>"
-    print "\t--imfolder <image folder>"
-    print "\t--names <image names txt file>"
-    print "\t--ending <dot image ending pattenr>"
-    print "\t--output <features file>"
-    print "\t--pw_base <base patch width>"
-    print "\t--pw_norm <normalize patch width>"
-    print "\t--pw_dens <density patch width>"
-    print "\t--nr <number of patches per image. Default 500. If it is lower than 1 it will be performed a dense extraction>"
-    print "\t--sig <sigma for the density images. Default 2.5>"
-    print "\t--pmap <perspective file>"
-    print "\t--use_perspective <enable perspective usage>"
-    print "\t--n_scales <number of different scales to extract form each patch>"
-    print "\t--split <split the data in files with the specified size>"
-    print "\t--flip <add an horizon flipped copy>"
-    print "\t--dataset <dataset choice>"
     
 def main(argv):
+    # Init cfg file
+    cfg_file = ''
+    
     # Get parameters
     try:
-        opts, _ = getopt.getopt(argv, "h:", ["imfolder=", "output=", "names=",
-          "ending=", "pw_base=", "pw_norm=", "pw_dens=", "sig=", "nr=", 
-          "n_scales=", "meanim=", "split=", "flip", "use_perspective", "pmap=", 
-          "cfg=", "dataset="])
+        opts, _ = getopt.getopt(argv, "h:", ["cfg="])
     except getopt.GetoptError:
         dispHelp()
         return
@@ -273,49 +249,17 @@ def main(argv):
         if opt == '-h':
             dispHelp(argv[0])
             return
-        elif opt in ("--imfolder"):
-            im_folder = arg
-        elif opt in ("--output"):
-            output_file = arg
-        elif opt in ("--names"):
-            im_list_file = arg
-        elif opt in ("--ending"):
-            dot_ending = arg
-        elif opt in ("--pw_base"):
-            pw_base = int(arg)
-        elif opt in ("--pw_norm"):
-            pw_norm = int(arg)
-        elif opt in ("--pw_dens"):
-            pw_dens = int(arg)
-        elif opt in ("--nr"):
-            Nr = int(arg)
-        elif opt in ("--n_scales"):
-            n_scales = int(arg)
-        elif opt in ("--sig"):
-            sigmadots = float(arg)
-        elif opt in ("--split"):
-            split_size = int(arg)
-        elif opt in ("--flip"):
-            do_flip = True
-        elif opt in ("--use_perspective"):
-            use_perspective = True
-        elif opt in ("--pmap"):
-            perspective_path = arg
         elif opt in ("--cfg"):
             cfg_file = arg
-        elif opt in ("--dataset"):
-            dataset = arg
             
-    if len(cfg_file) > 0:
-        print "Warning! a config file is set, all the other parameter will be overridden!"
-        (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
-        pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
-        perspective_path, use_perspective) = initFromCfg(cfg_file)
+    print "Loading configuration file: ", cfg_file
+    (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
+    pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
+    perspective_path, use_perspective) = initGenFeatFromCfg(cfg_file)
     
     print "Choosen parameters:"
     print "-------------------"
     print "Dataset: ", dataset
-    print "Config file: ", cfg_file
     print "Data base location: ", im_folder
     print "Image names file: ", im_list_file 
     print "Output file:", output_file

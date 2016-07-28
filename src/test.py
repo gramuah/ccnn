@@ -29,7 +29,7 @@ import time
 
 # Vision and maths
 import numpy as np
-from utils import *
+import utils as utl
 from gen_features import genDensity, genPDensity, loadImage, extractEscales
 import caffe
 import cv2
@@ -57,7 +57,7 @@ class CaffePredictor:
     def process(self, im, base_pw):
         # Compute dense positions where to extract patches
         [heith, width] = im.shape[0:2]
-        pos = get_dense_pos(heith, width, base_pw, stride=10)
+        pos = utl.get_dense_pos(heith, width, base_pw, stride=10)
 
         # Initialize density matrix and vouting count
         dens_map = np.zeros( (heith, width), dtype = np.float32 )   # Init density to 0
@@ -95,7 +95,7 @@ class CaffePredictor:
             pred = pred.reshape(  (p_side, p_side) )
             
             # Resize it back to the original size
-            pred = resizeDensityPatch(pred, crop_im.shape[0:2])          
+            pred = utl.resizeDensityPatch(pred, crop_im.shape[0:2])          
             pred[pred<0] = 0
 
             # Sumup density map into density map and increase count of votes
@@ -179,6 +179,45 @@ def testOnImg(CNN, im, gtdots, pw, mask = None):
 
     return ntrue,npred,resImg,gtdots
 
+def initTestFromCfg(cfg_file):
+    '''
+    @brief: initialize all parameter from the cfg file. 
+    '''
+    
+    # Load cfg parameter from yaml file
+    cfg = utl.cfgFromFile(cfg_file)
+    
+    # Fist load the dataset name
+    dataset = cfg.DATASET
+    
+    # Set default values
+    use_mask = cfg[dataset].USE_MASK
+    use_perspective = cfg[dataset].USE_PERSPECTIVE
+    
+    # Mask pattern ending
+    mask_ending = cfg[dataset].MASK_ENDING
+        
+    # Img patterns ending
+    dot_ending = cfg[dataset].DOT_ENDING
+    
+    # Test vars
+    test_names_file = cfg[dataset].TEST_LIST
+    
+    # Im folder
+    im_folder = cfg[dataset].IM_FOLDER
+
+    # Patch parameters
+    pw = cfg[dataset].PW # Patch with 
+    sigmadots = cfg[dataset].SIG # Densities sigma
+    n_scales = cfg[dataset].N_SCALES # Escales to extract
+    perspective_path = cfg[dataset].PERSPECTIVE_MAP
+
+        
+    return (dataset, use_mask, mask_ending, test_names_file, im_folder, 
+            dot_ending, pw, sigmadots, n_scales, perspective_path, 
+            use_perspective)
+
+
 def dispHelp(arg0):
     print "======================================================"
     print "                       Usage"
@@ -186,62 +225,33 @@ def dispHelp(arg0):
     print "\t-h display this message"
     print "\t--cpu_only"
     print "\t--tdev <GPU ID>"
-    print "\t--tfeat <test features file>"
-    print "\t--imfolder <test image folder>"
-    print "\t--timnames <test image names txt file>"
-    print "\t--dending <dot image ending pattern>"
-    print "\t--usemask <flag to use masks>"
-    print "\t--mask <mask path (h5 file)>"
-    print "\t--model <random forest model to store>"
-    print "\t--pw <patch size. Default 7>"
-    print "\t--nr <number of patches per image. Default 500>"
-    print "\t--sig <sigma for the density images. Default 2.5>"
-    print "\t--n_scales <number of different scales to extract form each patch>"
     print "\t--prototxt <caffe prototxt file>"
     print "\t--caffemodel <caffe caffemodel file>"
-    print "\t--meanim <mean image npy file>"
-    print "\t--pmap <perspective file>"
-    print "\t--use_perspective <enable perspective usage>"
+    print "\t--cfg <config file yaml>"
 
-def main(argv):      
+def main(argv):
+    # Init parameters      
     use_cpu = False
     gpu_dev = 0
-    
-    # Set default values
-    use_mask = cfg.TRANCOS.USE_MASK
-    use_perspective = cfg.TRANCOS.USE_PERSPECTIVE
-    
-    # Mask pattern ending
-    mask_ending = cfg.TRANCOS.MASK_ENDING
-        
-    # Img patterns ending
-    dot_ending = cfg.TRANCOS.DOT_ENDING
-    
-    # Test vars
-    test_names_file = cfg.TRANCOS.TEST_LIST
-    
-    # Im folder
-    im_folder = cfg.TRANCOS.IM_FOLDER
-    
+
+    # Database
+    dataset = ''
+
+    # GAME max level
+    mx_game = 4 # Max game target
+
     # Batch size
     b_size = -1
 
     # CNN vars
     prototxt_path = 'models/trancos/hydra2/hydra_deploy.prototxt'
     caffemodel_path = 'models/trancos/hydra2/trancos_hydra2.caffemodel'
-
-    # Patch parameters
-    pw = cfg.TRANCOS.PW # Patch with 
-    sigmadots = cfg.TRANCOS.SIG # Densities sigma
-    mx_game = 4 # Max game target
-    n_scales = cfg.TRANCOS.N_SCALES # Escales to extract
-    perspective_path = cfg.TRANCOS.PERSPECTIVE_MAP
+        
         
     # Get parameters
     try:
-        opts, _ = getopt.getopt(argv, "h:", ["imfolder=", "timnames=", 
-            "dending=", "pw=", "sig=", "n_scales=", "usemask", "mask=",
-            "prototxt=", "caffemodel=", "meanim=", "pmap=", "use_perspective", "cpu_only", "dev="])
+        opts, _ = getopt.getopt(argv, "h:", ["prototxt=", "caffemodel=", 
+                                             "cpu_only", "dev=", "cfg="])
     except getopt.GetoptError as err:
         print "Error while parsing parameters: ", err
         dispHelp(argv[0])
@@ -251,39 +261,27 @@ def main(argv):
         if opt == '-h':
             dispHelp(argv[0])
             return
-        elif opt in ("--imfolder"):
-            im_folder = arg
-        elif opt in ("--timnames"):
-            test_names_file = arg
-        elif opt in ("--dending"):
-            dot_ending = arg
-        elif opt in ("--mask"):
-            mask_ending = arg
-        elif opt in ("--usemask"):
-            use_mask = True
-        elif opt in ("--pw"):
-            pw = int(arg)
-        elif opt in ("--sig"):
-            sigmadots = float(arg)
-        elif opt in ("--n_scales"):
-            n_scales = int(arg)
         elif opt in ("--prototxt"):
             prototxt_path = arg
         elif opt in ("--caffemodel"):
             caffemodel_path = arg
-        elif opt in ("--pmap"):
-            perspective_path = arg
-        elif opt in ("--use_perspective"):
-            use_perspective = True
         elif opt in ("--cpu_only"):
             use_cpu = True            
         elif opt in ("--dev"):
             gpu_dev = int(arg)
+        elif opt in ("--cfg"):
+            cfg_file = arg
+            
+    print "Loading configuration file: ", cfg_file
+    (dataset, use_mask, mask_ending, test_names_file, im_folder, 
+            dot_ending, pw, sigmadots, n_scales, perspective_path, 
+            use_perspective) = initTestFromCfg(cfg_file)
             
     print "Choosen parameters:"
     print "-------------------"
     print "Use only CPU: ", use_cpu
     print "GPU devide: ", gpu_dev
+    print "Dataset: ", dataset
     print "Test data base location: ", im_folder
     print "Test inmage names: ", test_names_file
     print "Dot image ending: ", dot_ending
@@ -339,8 +337,8 @@ def main(argv):
     
     for ix, name in enumerate(im_names):
         # Get image paths
-        im_path = extendName(name, im_folder)
-        dot_im_path = extendName(name, im_folder, use_ending=True, pattern=dot_ending)
+        im_path = utl.extendName(name, im_folder)
+        dot_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=dot_ending)
 
         # Read image files
         im = loadImage(im_path, color = True)
@@ -355,7 +353,7 @@ def main(argv):
         # Get mask if needed
         mask = None
         if use_mask:
-            mask_im_path = extendName(name, im_folder, use_ending=True, pattern=mask_ending)
+            mask_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=mask_ending)
             mask = sio.loadmat(mask_im_path, chars_as_strings=1, matlab_compatible=1)
             mask = mask.get('BW')
         
@@ -388,11 +386,6 @@ def main(argv):
         results[l] = np.mean( game_table[:,l] )
         print "GAME for level %d: %.2f " % (l, np.mean( game_table[:,l] ))
     
-    res_file = test_names_file[:-4] + '.npy'
-    if os.path.isfile(res_file):
-        prev_res = np.load(res_file)
-        results = np.vstack( (prev_res, results) )
-
     return 0
 
 if __name__=="__main__":
