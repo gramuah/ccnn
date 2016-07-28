@@ -234,9 +234,6 @@ def main(argv):
     use_cpu = False
     gpu_dev = 0
 
-    # Database
-    dataset = ''
-
     # GAME max level
     mx_game = 4 # Max game target
 
@@ -373,7 +370,6 @@ def main(argv):
         for l in range(mx_game):
             game_table[count, l] = gameMetric(resImg, gtdots, l)
     
-#         print "Game: ", game_table[count, :]
         count = count +1
             
     ntrueall=np.asarray(ntrueall)

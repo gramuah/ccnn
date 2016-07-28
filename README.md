@@ -53,10 +53,13 @@ This code allows the usage of CPU and GPU. We strongly recommend the usage the G
 ### Installation (sufficient for the demo)
 
 1. Be sure you have added to your `PATH` the `tools` directory of your `Caffe` compilation:
+
     ```Shell
     export PATH=$CAFFE_ROOT/build/tools:$PATH
     ```
+    
 2. Be sure you have added your `pycaffe` compilation into your `PYTHONPATH`:
+
 	```Shell
     export PYTHONPATH=$CAFFE_ROOT/python:$PYTHONPATH
     ```
@@ -68,6 +71,7 @@ This code allows the usage of CPU and GPU. We strongly recommend the usage the G
 ### Demo
 
 *After successfully completing [basic installation](#installation-sufficient-for-the-demo)*, you'll be ready to run the demo.
+
 	```Shell
 	./experiments/scripts/demo.sh
 	```
@@ -82,6 +86,7 @@ To train an test your own model, you should follow the next steps:
 
 1. Edit the configuration file "config.py" placed into the src folder.
 2. Launch the system by:
+
 	```Shell
     ./experiments/scripts/run_trancos.sh
     ```
