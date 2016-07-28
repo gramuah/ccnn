@@ -68,7 +68,6 @@ This code allows the usage of CPU and GPU. We strongly recommend the usage the G
 ### Demo
 
 *After successfully completing [basic installation](#installation-sufficient-for-the-demo)*, you'll be ready to run the demo.
-
 	```Shell
     ./experiments/scripts/demo.sh
     ```
