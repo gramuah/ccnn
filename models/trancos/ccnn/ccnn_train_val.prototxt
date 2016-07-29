@@ -10,7 +10,7 @@ layer {
 #  }
   hdf5_data_param {
     source: "genfiles/features/train.txt"
-    batch_size: 1
+    batch_size: 128
     #shuffle: true
   }
 }

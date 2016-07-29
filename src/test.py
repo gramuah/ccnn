@@ -170,7 +170,7 @@ def testOnImg(CNN, im, gtdots, pw, mask = None):
     resImg = CNN.process(im, pw) 
 
     # Mask image if provided
-    if mask != None:
+    if mask is not None:
         resImg = resImg * mask
         gtdots = gtdots * mask
 
