@@ -2,7 +2,7 @@ DATASET: 'TRANCOS'
 TRANCOS:
   # Database params
   DOT_ENDING: 'dots.png'
-  MASK_ENDING: 'mask.mat'
+  MASK_FILE: 'mask.mat'
   COLOR: True
 
   # Feature extraction params

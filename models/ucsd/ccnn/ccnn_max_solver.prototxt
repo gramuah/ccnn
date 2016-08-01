@@ -1,4 +1,4 @@
-net: "models/trancos/ccnn/ccnn_train_val.prototxt"
+net: "models/ucsd/ccnn/ccnn_max_train_val.prototxt"
 test_iter: 100
 test_interval: 500
 base_lr: 0.0001
@@ -7,9 +7,9 @@ power: 0.75
 gamma: 0.001
 stepsize: 1000
 display: 20
-max_iter: 500
+max_iter: 50000
 momentum: 0.9
 weight_decay: 0.001
-snapshot: 2500
-snapshot_prefix: "genfiles/output_models/trancos/ccnn/ccnn_trancos"
+snapshot: 5000
+snapshot_prefix: "genfiles/output_models/ucsd/ccnn/ccnn_ucsd_max"
 solver_mode: GPU

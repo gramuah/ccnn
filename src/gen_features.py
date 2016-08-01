@@ -220,8 +220,8 @@ def initGenFeatFromCfg(cfg_file):
     # Others
     split_size = cfg[dataset].SPLIT
     do_flip = cfg[dataset].FLIP
-    perspective_path = cfg[dataset].USE_PERSPECTIVE
-    use_perspective = cfg[dataset].PERSPECTIVE_MAP
+    use_perspective = cfg[dataset].USE_PERSPECTIVE
+    perspective_path = cfg[dataset].PERSPECTIVE_MAP
     is_colored = cfg[dataset].COLOR
 
         

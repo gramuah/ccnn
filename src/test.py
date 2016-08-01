@@ -195,7 +195,7 @@ def initTestFromCfg(cfg_file):
     use_perspective = cfg[dataset].USE_PERSPECTIVE
     
     # Mask pattern ending
-    mask_ending = cfg[dataset].MASK_ENDING
+    mask_file = cfg[dataset].MASK_FILE
         
     # Img patterns ending
     dot_ending = cfg[dataset].DOT_ENDING
@@ -214,7 +214,7 @@ def initTestFromCfg(cfg_file):
     is_colored = cfg[dataset].COLOR
 
         
-    return (dataset, use_mask, mask_ending, test_names_file, im_folder, 
+    return (dataset, use_mask, mask_file, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
             use_perspective, is_colored)
 
@@ -271,7 +271,7 @@ def main(argv):
             cfg_file = arg
             
     print "Loading configuration file: ", cfg_file
-    (dataset, use_mask, mask_ending, test_names_file, im_folder, 
+    (dataset, use_mask, mask_file, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
             use_perspective, is_colored) = initTestFromCfg(cfg_file)
             
@@ -284,7 +284,7 @@ def main(argv):
     print "Test inmage names: ", test_names_file
     print "Dot image ending: ", dot_ending
     print "Use mask: ", use_mask
-    print "Mask ending: ", mask_ending
+    print "Mask pattern: ", mask_file
     print "Patch width (pw): ", pw
     print "Sigma for each dot: ", sigmadots
     print "Number of scales: ", n_scales
@@ -312,6 +312,14 @@ def main(argv):
         pers_file = h5py.File(perspective_path,'r')
         pmap = np.array( pers_file['pmap'] ).T
         pers_file.close()
+        
+    mask = None
+    if dataset == 'UCSD':
+        print "Reading mask"
+        if use_mask:
+            mask_f = h5py.File(mask_file,'r')
+            mask = np.array(mask_f['mask']).T
+            mask_f.close()
     
     print "Reading image file names:"
     im_names = np.loadtxt(test_names_file, dtype='str')
@@ -349,11 +357,11 @@ def main(argv):
             dens_im = genDensity(dot_im, sigmadots)
         
         # Get mask if needed
-        mask = None
-        if use_mask:
-            mask_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=mask_ending)
-            mask = sio.loadmat(mask_im_path, chars_as_strings=1, matlab_compatible=1)
-            mask = mask.get('BW')
+        if dataset != 'UCSD':
+            if use_mask:
+                mask_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=mask_file)
+                mask = sio.loadmat(mask_im_path, chars_as_strings=1, matlab_compatible=1)
+                mask = mask.get('BW')
         
         s=time.time()
         ntrue,npred,resImg,gtdots=testOnImg(CNN, im, dens_im, pw, mask)
