@@ -204,6 +204,7 @@ def initGenFeatFromCfg(cfg_file):
     im_folder = cfg[dataset].IM_FOLDER
     im_list_file = cfg[dataset].TRAINVAL_LIST
     output_file = cfg[dataset].TRAIN_FEAT
+    feature_file_path = cfg[dataset].TRAIN_FEAT_LIST
     
     # Img patterns
     dot_ending = cfg[dataset].DOT_ENDING
@@ -224,9 +225,9 @@ def initGenFeatFromCfg(cfg_file):
     is_colored = cfg[dataset].COLOR
 
         
-    return (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
-        pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
-        perspective_path, use_perspective, is_colored)
+    return (dataset, im_folder, im_list_file, output_file, feature_file_path, 
+        dot_ending, pw_base, pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, 
+        do_flip, perspective_path, use_perspective, is_colored)
 
 def dispHelp():
     print "======================================================"
@@ -254,9 +255,9 @@ def main(argv):
             cfg_file = arg
             
     print "Loading configuration file: ", cfg_file
-    (dataset, im_folder, im_list_file, output_file, dot_ending, pw_base,
-    pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, do_flip,
-    perspective_path, use_perspective, is_colored) = initGenFeatFromCfg(cfg_file)
+    (dataset, im_folder, im_list_file, output_file, feature_file_path, 
+    dot_ending, pw_base, pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, 
+    do_flip, perspective_path, use_perspective, is_colored) = initGenFeatFromCfg(cfg_file)
     
     print "Choosen parameters:"
     print "-------------------"
@@ -264,6 +265,7 @@ def main(argv):
     print "Data base location: ", im_folder
     print "Image names file: ", im_list_file 
     print "Output file:", output_file
+    print "Output feature names file:", feature_file_path
     print "Dot image ending: ", dot_ending
     print "Patch width (pw_base): ", pw_base
     print "Patch width (pw_norm): ", pw_norm
@@ -282,6 +284,10 @@ def main(argv):
         pers_file = h5py.File(perspective_path,'r')
         pmap = np.array( pers_file['pmap'] ).T
         pers_file.close()
+    
+    print "Creating feature names file:"
+    feature_file = open(feature_file_path, 'w')
+    feature_file.close() # Create empty file
     
     print "Reading image file names:"
     im_names = np.loadtxt(im_list_file, dtype='str')
@@ -353,6 +359,7 @@ def main(argv):
             print "Saving {} examples".format(len(ldens))
         
             # Compress data and save
+            feature_file = open(feature_file_path, 'a')
             comp_kwargs = {'compression': 'gzip', 'compression_opts': 1}
             with h5py.File(opt_num_name, 'w') as f:
                 f.create_dataset('label', data=ldens, **comp_kwargs)
@@ -362,8 +369,9 @@ def main(argv):
                     dataset_name = 'data_s{}'.format(s) 
                     print "Creating dataset: ", dataset_name
                     f.create_dataset(dataset_name, data=trasposeImages(patches_list[:,s,...]), **comp_kwargs)
-                
                 f.close()
+            feature_file.write(opt_num_name + '\n')
+            feature_file.close()
 
             # Increase file counter
             file_count += 1
@@ -385,6 +393,7 @@ def main(argv):
         print "Saving {} examples".format(len(ldens))
     
         # Compress data and save
+        feature_file = open(feature_file_path, 'a')
         comp_kwargs = {'compression': 'gzip', 'compression_opts': 1}
         with h5py.File(opt_num_name, 'w') as f:
             f.create_dataset('label', data=ldens, **comp_kwargs)
@@ -394,7 +403,8 @@ def main(argv):
                 print "Creating dataset: ", dataset_name
                 f.create_dataset(dataset_name, data=trasposeImages(patches_list[:,s,...]), **comp_kwargs)
             f.close()
-
+        feature_file.write(opt_num_name + '\n')
+        feature_file.close()
     
     print "--------------------"    
     print "Finish!"

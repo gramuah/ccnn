@@ -9,7 +9,7 @@ layer {
 #    phase: TRAIN
 #  }
   hdf5_data_param {
-    source: "genfiles/data/train.txt"
+    source: "genfiles/features/train_hydra_2s.txt"
     batch_size: 16
     shuffle: true
   }
@@ -24,7 +24,7 @@ layer {
 #    phase: TEST
 #  }
 #  hdf5_data_param {
-#    source: "genfiles/data/test.txt"
+#    source: "genfiles/features/test_hydra_2s.txt"
 #    batch_size: 64
 #    shuffle: true
 #  }

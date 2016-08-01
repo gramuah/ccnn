@@ -7,9 +7,9 @@ power: 0.75
 gamma: 0.001
 stepsize: 1000
 display: 20
-max_iter: 50000
+max_iter: 30000
 momentum: 0.9
 weight_decay: 0.001
 snapshot: 50000
-snapshot_prefix: "genfiles/output_models/trancos/trancos/hydra3_trancos"
+snapshot_prefix: "genfiles/output_models/trancos/hydra3/hydra3_trancos"
 solver_mode: GPU
