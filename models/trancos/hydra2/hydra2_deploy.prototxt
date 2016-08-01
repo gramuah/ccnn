@@ -1,4 +1,4 @@
-name: "UCSD_CNN"
+name: "TRANCOS_HYDRA_2S_CNN"
 input: "data_s0"
 input_dim: 1
 input_dim: 3

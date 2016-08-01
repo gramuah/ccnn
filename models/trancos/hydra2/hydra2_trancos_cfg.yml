@@ -22,8 +22,8 @@ TRANCOS:
   TRAINVAL_LIST: 'data/TRANCOS/image_sets/trainval.txt'
   TEST_LIST: 'data/TRANCOS/image_sets/test.txt'
   PERSPECTIVE_MAP: ''
-  TRAIN_FEAT: 'genfiles/features/trancos_train_feat_2s'
-  VAL_FEAT: 'genfiles/features/trancos_val_feat_2s'
+  TRAIN_FEAT: 'genfiles/features/trancos_train_feat_2s_'
+  VAL_FEAT: 'genfiles/features/trancos_val_feat_2s_'
 
   # CNN model params
   CNN_PW_IN: 72    # CNN patch width in

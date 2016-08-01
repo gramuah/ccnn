@@ -1,4 +1,4 @@
-name: "TRANCOS_HYDRA_CNN"
+name: "TRANCOS_HYDRA_3S_CNN"
 layer {
   name: "data"
   type: "HDF5Data"

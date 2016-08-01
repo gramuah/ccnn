@@ -1,4 +1,4 @@
-name: "UCSD_CNN"
+name: "TRANCOS_HYDRA_2S_CNN"
 layer {
   name: "data"
   type: "HDF5Data"
