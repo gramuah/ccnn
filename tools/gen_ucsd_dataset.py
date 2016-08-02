@@ -6,7 +6,7 @@
 @author: Daniel Oñoro Rubio
 '''
 
-import sys, getopt
+import sys, getopt, os
 import glob
 import numpy as np
 
@@ -15,11 +15,8 @@ def dispHelp(arg0):
     print "                       Usage"
     print "======================================================"
     print "\t-h display this message"
-    print "\t--cpu_only"
-    print "\t--tdev <GPU ID>"
-    print "\t--prototxt <caffe prototxt file>"
-    print "\t--caffemodel <caffe caffemodel file>"
-    print "\t--cfg <config file yaml>"
+    print "\t--imfolder <where the images are>"
+    print "\t--setsfolder <where to save the set list>"
 
 
 def main(argv):
@@ -39,12 +36,12 @@ def main(argv):
             dispHelp(argv[0])
             return
         elif opt in ("--imfolder"):
-            conf_folder = arg
-        elif opt in ("--setsfolder"):
             img_folder = arg
+        elif opt in ("--setsfolder"):
+            conf_folder = arg
 
     # Get UCSD image names    
-    image_names = glob.glob(img_folder + '*[0-9].png')
+    image_names = glob.glob(os.path.join( img_folder, '*[0-9].png') )
     # Sort frames by name
     image_names = sorted(image_names)
     
@@ -52,7 +49,7 @@ def main(argv):
     
     # Generate Maximal dataset
     # Traning
-    training_f = open(conf_folder + 'training_maximal.txt','w')
+    training_f = open(os.path.join(conf_folder,'training_maximal.txt'),'w')
     for ix in range(600, 1400+5,5):
         slash_pos = image_names[ix].rfind('/')
         name = image_names[ix][slash_pos + 1 : ]
@@ -61,7 +58,7 @@ def main(argv):
     training_f.close()
      
     # Testing
-    testing_f = open(conf_folder + 'testing_maximal.txt','w')
+    testing_f = open(os.path.join(conf_folder, 'testing_maximal.txt'),'w')
     for ix in range(600, 1400+5):
         # Check if it belongs to training set
         if ix % 5 == 0:
@@ -76,7 +73,7 @@ def main(argv):
     
     # Generate Downscale dataset
     # Traning
-    training_f = open(conf_folder + 'training_downscale.txt','w')
+    training_f = open(os.path.join(conf_folder,'training_downscale.txt'),'w')
     for ix in range(1205, 1600+5,5):
         slash_pos = image_names[ix].rfind('/')
         name = image_names[ix][slash_pos + 1 : ]
@@ -85,7 +82,7 @@ def main(argv):
     training_f.close()
      
     # Testing
-    testing_f = open(conf_folder + 'testing_downscale.txt','w')
+    testing_f = open(os.path.join(conf_folder,'testing_downscale.txt'),'w')
     for ix in range(1205, 1600+5):
         # Check if it belongs to training set
         if ix % 5 == 0:
@@ -99,7 +96,7 @@ def main(argv):
     
     # Generate Upscale dataset
     # Traning
-    training_f = open(conf_folder + 'training_upscale.txt','w')
+    training_f = open(os.path.join(conf_folder,'training_upscale.txt'),'w')
     for ix in range(805, 1100+5,5):
         slash_pos = image_names[ix].rfind('/')
         name = image_names[ix][slash_pos + 1 : ]
@@ -108,7 +105,7 @@ def main(argv):
     training_f.close()
      
     # Testing
-    testing_f = open(conf_folder + 'testing_upscale.txt','w')
+    testing_f = open(os.path.join(conf_folder,'testing_upscale.txt'),'w')
     for ix in range(805, 1100+5):
         # Check if it belongs to training set
         if ix % 5 == 0:
@@ -120,9 +117,9 @@ def main(argv):
         testing_f.write( name + '\n' )
     testing_f.close()
  
-     # Generate Minimal dataset
+    # Generate Minimal dataset
     # Traning
-    training_f = open(conf_folder + 'training_minimal.txt','w')
+    training_f = open(os.path.join(conf_folder,'training_minimal.txt'),'w')
     for ix in range(640, 1360+80,80):
         slash_pos = image_names[ix].rfind('/')
         name = image_names[ix][slash_pos + 1 : ]
@@ -131,7 +128,7 @@ def main(argv):
     training_f.close()
      
     # Testing
-    testing_f = open(conf_folder + 'testing_minimal.txt','w')
+    testing_f = open(os.path.join(conf_folder,'testing_minimal.txt'),'w')
     for ix in range(640, 1360+80):
         # Check if it belongs to training set
         if ix % 80 == 0:
