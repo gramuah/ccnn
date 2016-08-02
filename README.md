@@ -27,6 +27,9 @@ Was our code useful for you? Please cite us:
 3. [Basic installation](#installation-sufficient-for-the-demo)
 4. [Demo](#demo)
 5. [Usage](#usage)
+6. [Download pre-trained models](#download-pre-trained-models)
+7. [Download a dataset](#download-a-dataset)
+8. [Acknowledgements](#acknowledgements)
 
 ### Requirements: software
 
@@ -39,7 +42,7 @@ Was our code useful for you? Please cite us:
   WITH_PYTHON_LAYER := 1
   ```
 
-2. Python packages you might not have: `cython`, `python-opencv`, `easydict`
+2. Python packages you might not have: `cython`, `python-opencv`, `easydict`, `opencv`
 
 
 ### Requirements: hardware
@@ -64,32 +67,53 @@ This code allows the usage of CPU and GPU. We strongly recommend the usage the G
     export PYTHONPATH=$CAFFE_ROOT/python:$PYTHONPATH
     ```
 
-3. Download the [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/) and place it into the `data` folder of the project.
+3. Download the [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/) by executing the following command:
 
-4. Download the [trancos CCNN model]()  <- Comming soon
+	```Shell
+    ./tools/get_trancos.sh
+    ```
+
+4. Download the TRANCOS CCNN model. **Comming soon**
     
 ### Demo
 
 After successfully completing [basic installation](#installation-sufficient-for-the-demo), you'll be ready to run the demo.
 
-	```Shell
+	```
     ./tools/demo.sh
     ```
-    
-### Download pre-trained models
-
-Comming soon...
-
 ### Usage
 
 To train an test your own model, you should follow the next steps:
 
-1. Edit the configuration file "config.py" placed into the src folder.
+1. Edit the configuration file "ccnn_trancos_cfg.yml" placed into the corresponding model folder.
 2. Launch the system by:
 
 	```Shell
-    ./experiments/scripts/run_trancos.sh
+    ./experiments/scripts/trancos_train_test.sh
     ```
+### Download pre-trained models
+
+Comming soon...
+
+
+### Download a dataset
+
+In order to download and setup a dataset we recommend to use our scripts:
+
+* [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/):
+ 
+	```Shell
+    ./tools/get_trancos.sh
+    ```
+
+* [UCSD dataset](http://www.svcl.ucsd.edu/projects/peoplecnt/):
+
+	```Shell
+    ./tools/get_ucsd.sh
+    ```
+
+**Note:** Make sure the folder "data/" does not already contain the dataset.
 
 ### Acknowledgements
 This work is supported by the projects of the DGT with references SPIP2014-1468 and SPIP2015-01809, and the project of the MINECO TEC2013-45183-R.
