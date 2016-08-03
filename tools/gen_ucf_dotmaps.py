@@ -10,6 +10,8 @@ import sys, getopt, os
 import numpy as np
 import scipy.io as scio 
 import cv2
+from PIL import Image
+
 
 def dispHelp(arg0):
     print "======================================================"
@@ -24,7 +26,7 @@ def main(argv):
     UCF_N_IMAGES = 50
     
     notation_folder = 'data/UCF/params/'
-    output = 'data/UCF/images/'
+    imdir = 'data/UCF/images/'
 
     # Get parameters
     try:
@@ -38,29 +40,31 @@ def main(argv):
         if opt == '-h':
             dispHelp(argv[0])
             return
-        elif opt in ("--folder"):
+        elif opt in ("--notationdir"):
             notation_folder = arg
-        elif opt in ("--output"):
+        elif opt in ("--imdir"):
             output = arg
 
     for i in range(UCF_N_IMAGES):
         notation_file = os.path.join( notation_folder, '{}_ann.mat'.format(i+1) )
+        img_file = os.path.join( imdir, '{}.jpg'.format(i+1) )
         notation = scio.loadmat(notation_file, struct_as_record=False, squeeze_me=True)
-        dots = notation['annPoints'] - 1 # Make 0 index
+        dots = notation['annPoints'] - 1 # Make 0 index (x,y)
 
         # Init image
-        black_im = np.zeros((158,238,3), dtype=np.uint8) # UCSD size
+        with Image.open(img_file) as im:
+            [width, height] = im.size
+        black_im = np.zeros((height,width,3), dtype=np.uint8) # UCSD size
         # Get dots
-        dots = loc[:, (1,0,2)]  -1 # 0 index
-        dots[:,2] = 2 # Set red channel
+        dots = dots  -1 # 0 index
         dots = dots.astype(np.int32)
-        mask = dots[:,0]<158
-        mask = np.logical_and( mask, dots[:,1]<238 )
+        mask = dots[:,0]<width
+        mask = np.logical_and( mask, dots[:,1]<height )
         dots = dots[mask]
         # Draw dots           
-        black_im[dots[:,0],dots[:,1],dots[:,2]] = 255
+        black_im[dots[:,1],dots[:,0],2] = 255
         # Save image
-        im_name = os.path.join( output, 'vidf1_33_00{}_f{:03d}dots.png'.format(i, jx+1) )
+        im_name = os.path.join( imdir, '{}dots.png'.format(i+1) )
         cv2.imwrite(im_name, black_im)
     
     return 0

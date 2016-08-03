@@ -16,7 +16,7 @@ def dispHelp(arg0):
     print "                       Usage"
     print "======================================================"
     print "\t-h display this message"
-    print "\t--noationdir <where the mat files are>"
+    print "\t--folder <where the mat files are>"
     print "\t--output <where the images are>"
 
 
@@ -26,7 +26,7 @@ def main(argv):
 
     # Get parameters
     try:
-        opts, _ = getopt.getopt(argv, "h:", ["notation=", "output="])
+        opts, _ = getopt.getopt(argv, "h:", ["folder=", "output="])
     except getopt.GetoptError as err:
         print "Error while parsing parameters: ", err
         dispHelp(argv[0])
