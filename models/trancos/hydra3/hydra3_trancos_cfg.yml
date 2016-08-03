@@ -15,7 +15,6 @@ TRANCOS:
   USE_PERSPECTIVE: False
 
   # Paths and others
-  TRAINVAL_LIST: 'data/TRANCOS/image_sets/trainval.txt'
   IM_FOLDER: 'data/TRANCOS/images/'
   TRAINING_LIST: 'data/TRANCOS/image_sets/training.txt'
   VALIDATION_LIST: 'data/TRANCOS/image_sets/validation.txt'

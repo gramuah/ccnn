@@ -15,7 +15,6 @@ UCSD:
   USE_PERSPECTIVE: True
 
   # Paths and others
-  TRAINVAL_LIST: 'data/UCSD/image_sets/training_maximal.txt'
   IM_FOLDER: 'data/UCSD/images/'
   TRAINING_LIST: 'data/UCSD/image_sets/training_maximal.txt'
   VALIDATION_LIST: 'data/UCSD/image_sets/training_maximal.txt'
