@@ -79,9 +79,10 @@ This code allows the usage of CPU and GPU. We strongly recommend the usage the G
 
 After successfully completing [basic installation](#installation-sufficient-for-the-demo), you'll be ready to run the demo.
 
-	```
+    ```
     ./tools/demo.sh
     ```
+
 ### Usage
 
 To train an test your own model, you should follow the next steps:

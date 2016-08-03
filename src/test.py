@@ -310,7 +310,7 @@ def main(argv):
     print "Reading perspective file"
     if use_perspective:
         pers_file = h5py.File(perspective_path,'r')
-        pmap = np.array( pers_file['pmap'] ).T
+        pmap = np.array( pers_file['pmap'] )
         pers_file.close()
         
     mask = None
@@ -318,7 +318,7 @@ def main(argv):
         print "Reading mask"
         if use_mask:
             mask_f = h5py.File(mask_file,'r')
-            mask = np.array(mask_f['mask']).T
+            mask = np.array(mask_f['mask'])
             mask_f.close()
     
     print "Reading image file names:"

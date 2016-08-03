@@ -282,7 +282,7 @@ def main(argv):
     print "Reading perspective file"
     if use_perspective:
         pers_file = h5py.File(perspective_path,'r')
-        pmap = np.array( pers_file['pmap'] ).T
+        pmap = np.array( pers_file['pmap'] )
         pers_file.close()
     
     print "Creating feature names file:"
