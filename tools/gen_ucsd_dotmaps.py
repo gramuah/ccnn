@@ -7,7 +7,6 @@
 '''
 
 import sys, getopt, os
-import glob
 import numpy as np
 import scipy.io as scio 
 import cv2
@@ -17,7 +16,8 @@ def dispHelp(arg0):
     print "                       Usage"
     print "======================================================"
     print "\t-h display this message"
-    print "\t--folder <where the images are>"
+    print "\t--noationdir <where the mat files are>"
+    print "\t--output <where the images are>"
 
 
 def main(argv):
