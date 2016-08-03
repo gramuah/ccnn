@@ -11,7 +11,7 @@ GPU_DEV=0
 # Uncoment one of the following set of parameters
 
 # CCNN
-CONFIG_FILE=models/ucf/ccnn/ccnn_ucf_cfg.yml
+CONFIG_FILE=models/ucf/ccnn/ccnn_ucf_set_0_cfg.yml # Configure to choose dataset
 CAFFE_MODEL=genfiles/output_models/ucf/ccnn/ccnn_ucf_max_iter_50000.caffemodel
 DEPLOY=models/ucf/ccnn/ccnn_deploy.prototxt
 SOLVER=models/ucf/ccnn/ccnn_max_solver.prototxt

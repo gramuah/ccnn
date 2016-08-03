@@ -1,0 +1,32 @@
+DATASET: 'UCF'
+UCF:
+  # Database params
+  DOT_ENDING: 'dots.png'
+  MASK_FILE: ''
+  COLOR: False
+
+  # Feature extraction params
+  PW: 151            # Base patch side
+  NR: 1200            # < 1 = dense extraction
+  SIG: 15.0        
+  SPLIT: 15          # Create a new file every X images
+  USE_MASK: False
+  FLIP: True
+  USE_PERSPECTIVE: False
+
+  # Paths and others
+  IM_FOLDER: 'data/UCF/images/'
+  TRAINING_LIST: ''
+  VALIDATION_LIST: ''
+  TRAINVAL_LIST: 'data/UCF/image_sets/train_set_1.txt'
+  TEST_LIST: 'data/UCF/image_sets/test_set_1.txt'
+  PERSPECTIVE_MAP: ''
+  TRAIN_FEAT: 'genfiles/features/UCF_train_feat_'
+  TRAIN_FEAT_LIST: 'genfiles/features/train.txt'
+  VAL_FEAT: ''
+  VAL_FEAT_LIST: ''
+
+  # CNN model params
+  CNN_PW_IN: 72    # CNN patch width in
+  CNN_PW_OUT: 18   # CNN patch width out
+  N_SCALES: 1      # HYDRA number of heads
