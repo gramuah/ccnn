@@ -1,0 +1,15 @@
+net: "models/ucsd/hydra2/hydra2_min_train_val.prototxt"
+test_iter: 100
+test_interval: 500
+base_lr: 0.0001
+lr_policy: "inv"
+power: 0.75
+gamma: 0.001
+stepsize: 1000
+display: 20
+max_iter: 25000
+momentum: 0.9
+weight_decay: 0.001
+snapshot: 10000
+snapshot_prefix: "genfiles/output_models/ucsd/hydra2/hydra2_ucsd_min"
+solver_mode: GPU

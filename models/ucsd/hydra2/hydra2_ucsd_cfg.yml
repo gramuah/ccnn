@@ -1,0 +1,33 @@
+DATASET: 'UCSD'
+UCSD:
+  # Database params
+  DOT_ENDING: 'dots.png'
+  MASK_FILE: 'data/UCSD/params/ucsd_mask.h5'
+  COLOR: False
+
+  # Feature extraction params
+  PW: 73            # Base patch side
+  NR: 800            # < 1 = dense extraction
+  SIG: 8.0        
+  SPLIT: 15          # Create a new file every X images
+  USE_MASK: True
+  FLIP: True
+  USE_PERSPECTIVE: True
+
+  # Paths and others
+  TRAINVAL_LIST: 'data/UCSD/image_sets/training_maximal.txt'
+  IM_FOLDER: 'data/UCSD/images/'
+  TRAINING_LIST: 'data/UCSD/image_sets/training_maximal.txt'
+  VALIDATION_LIST: 'data/UCSD/image_sets/training_maximal.txt'
+  TRAINVAL_LIST: 'data/UCSD/image_sets/training_maximal.txt'
+  TEST_LIST: 'data/UCSD/image_sets/testing_maximal.txt'
+  PERSPECTIVE_MAP: 'data/UCSD/params/ucsd_pmap_min_norm.h5'
+  TRAIN_FEAT: 'genfiles/features/UCSD_train_feat_'
+  TRAIN_FEAT_LIST: 'genfiles/features/max_train.txt'
+  VAL_FEAT: 'genfiles/features/UCSD_val_feat_'
+  VAL_FEAT_LIST: 'genfiles/features/test.txt'
+
+  # CNN model params
+  CNN_PW_IN: 72    # CNN patch width in
+  CNN_PW_OUT: 18   # CNN patch width out
+  N_SCALES: 2      # HYDRA number of heads
