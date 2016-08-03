@@ -24,7 +24,7 @@ layer {
 #    phase: TEST
 #  }
 #  hdf5_data_param {
-#    source: "genfiles/data/test.txt"
+#    source: "genfiles/features/test.txt"
 #    batch_size: 128
 #    #shuffle: true
 #  }
