@@ -1,6 +1,6 @@
 # Towards perspective-free object counting with deep learning
 
-By Daniel Oñoro-Rubio and Roberto J. López-Sastre.
+By [Daniel Oñoro-Rubio](https://es.linkedin.com/in/daniel-oñoro-71062756) and [Roberto J. López-Sastre](http://agamenon.tsc.uah.es/Personales/rlopez/).
 
 GRAM, University of Alcalá, Alcalá de Henares, Spain.
 
