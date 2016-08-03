@@ -18,8 +18,8 @@ UCF:
   IM_FOLDER: 'data/UCF/images/'
   TRAINING_LIST: ''
   VALIDATION_LIST: ''
-  TRAINVAL_LIST: 'data/UCF/image_sets/train_set_0.txt'
-  TEST_LIST: 'data/UCF/image_sets/test_set_0.txt'
+  TRAINVAL_LIST: 'data/UCF/image_sets/train_set_3.txt'
+  TEST_LIST: 'data/UCF/image_sets/test_set_3.txt'
   PERSPECTIVE_MAP: ''
   TRAIN_FEAT: 'genfiles/features/UCF_train_feat_'
   TRAIN_FEAT_LIST: 'genfiles/features/train.txt'
@@ -29,4 +29,4 @@ UCF:
   # CNN model params
   CNN_PW_IN: 72    # CNN patch width in
   CNN_PW_OUT: 18   # CNN patch width out
-  N_SCALES: 2      # HYDRA number of heads
+  N_SCALES: 1      # HYDRA number of heads
