@@ -1,10 +1,18 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 '''
-@date: Created on Jun 15, 2015
-
-@author: Daniel Oñoro Rubio
+    @author: Daniel Oñoro Rubio
+    @organization: GRAM, University of Alcalá, Alcalá de Henares, Spain
+    @copyright: See LICENSE.txt
+    @contact: daniel.onoro@edu.uah.es
+    @date: Created on Jun 15, 2015
 '''
+
+"""
+This script creates the "maximal", "downscale", "upscale" and "minimal"
+datasets for training and testing.
+"""
 
 import sys, getopt, os
 import glob

@@ -1,10 +1,18 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 '''
-@date: Created on August 2, 2016
-
-@author: Daniel Oñoro Rubio
+    @author: Daniel Oñoro Rubio
+    @organization: GRAM, University of Alcalá, Alcalá de Henares, Spain
+    @copyright: See LICENSE.txt
+    @contact: daniel.onoro@edu.uah.es
+    @date: Created on August 2, 2016
 '''
+
+"""
+This script creates convert the perspective map and the roi fo the UCSD dataset
+to the supported format.
+"""
 
 import sys, getopt, os
 import h5py
