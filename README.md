@@ -33,7 +33,10 @@ Was our code useful for you? Please cite us:
 
 ### Requirements: software
 
-1. Requirements for `Caffe` and `pycaffe` (see: [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html))
+1. Use a Linux distribution. We have been developed and tested the code on [Ubuntu](http://www.ubuntu.com/).
+
+
+2. Requirements for `Caffe` and `pycaffe` (see: [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html)).
 
   **Note:** Caffe *must* be built with support for Python layers!
 
@@ -42,7 +45,7 @@ Was our code useful for you? Please cite us:
   WITH_PYTHON_LAYER := 1
   ```
 
-2. Python packages you might not have: `cython`, `python-opencv`, `easydict`, `opencv`
+3. Python packages you might not have: `cython`, `python-opencv`, `easydict`, `opencv`.
 
 
 ### Requirements: hardware
@@ -79,9 +82,9 @@ This code allows the usage of CPU and GPU. We strongly recommend the usage the G
 
 After successfully completing [basic installation](#installation-sufficient-for-the-demo), you'll be ready to run the demo.
 
-    ```
-    ./tools/demo.sh
-    ```
+	```
+	./tools/demo.sh
+	```
 
 ### Usage
 
