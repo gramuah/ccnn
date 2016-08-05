@@ -49,16 +49,16 @@ def genDensity(dot_im, sigmadots):
         
     return dot.astype(np.float32)
 
-
-'''
-    @brief: This function gets a dotted image and returns its density map 
-    scaling responses with the perspective map.
-    @param dots: annotated dot image.
-    @param sigmadots: density radius.
-    @param pmap: perspective map
-    @return: density map for the input dots image.
-'''
 def genPDensity(dot_im, sigmadots, pmap):
+    '''
+        @brief: This function gets a dotted image and returns its density map 
+        scaling responses with the perspective map.
+        @param dots: annotated dot image.
+        @param sigmadots: density radius.
+        @param pmap: perspective map
+        @return: density map for the input dots image.
+    '''
+    
     # Initialize density map
     dmap = np.zeros( (dot_im.shape[0], dot_im.shape[1]), np.float32 )
 

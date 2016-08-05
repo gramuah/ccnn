@@ -34,7 +34,7 @@ wget http://www.svcl.ucsd.edu/projects/peoplecnt/db/vidf-cvpr.zip
 unzip vidf-cvpr.zip
 
 # Generate notations
-python tools/gen_ucsd_dotmaps.py --notation vidf-cvpr/ --output data/UCSD/images
+python tools/gen_ucsd_dotmaps.py --folder vidf-cvpr/ --output data/UCSD/images
 python tools/gen_ucsd_extranotation.py --notation vidf-cvpr/ --output data/UCSD/params
 
 # Clean
