@@ -20,6 +20,9 @@ mv UCFCrowdCountingDataset_CVPR13/*.mat data/UCF/params
 # Create dot maps
 python tools/gen_ucf_dotmaps.py --notationdir data/UCF/params --imdir data/UCF/images
 
+# Create datasets
+python tools/gen_ucf_dataset.py --orderfile tools/ucf_order.txt --setsfolder data/UCF/image_sets
+
 # Clean
 rm  UCFCrowdCountingDataset_CVPR13.rar
 rm -fr UCFCrowdCountingDataset_CVPR13

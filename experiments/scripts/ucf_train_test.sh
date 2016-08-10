@@ -12,21 +12,21 @@ GPU_DEV=0
 
 # CCNN
 CONFIG_FILE=models/ucf/ccnn/ccnn_ucf_set_0_cfg.yml # Configure to choose dataset
-CAFFE_MODEL=genfiles/output_models/ucf/ccnn/ccnn_ucf_max_iter_50000.caffemodel
+CAFFE_MODEL=genfiles/output_models/ucf/ccnn/ccnn_trancos_iter_50000.caffemodel
 DEPLOY=models/ucf/ccnn/ccnn_deploy.prototxt
-SOLVER=models/ucf/ccnn/ccnn_max_solver.prototxt
+SOLVER=models/ucf/ccnn/ccnn_solver.prototxt
 
 # HYDRA 2s
 #CONFIG_FILE=models/ucf/hydra2/hydra2_ucf_cfg.yml
-#CAFFE_MODEL=genfiles/output_models/ucf/ucf/hydra2_ucf_max_iter_25000.caffemodel
+#CAFFE_MODEL=genfiles/output_models/ucf/ucf/hydra2_trancos_iter_25000.caffemodel
 #DEPLOY=models/ucf/hydra2/hydra2_deploy.prototxt
-#SOLVER=models/ucf/hydra2/hydra2_max_solver.prototxt
+#SOLVER=models/ucf/hydra2/hydra2_solver.prototxt
 
 # HYDRA 3s
 #CONFIG_FILE=models/ucf/hydra3/hydra3_ucf_cfg.yml
-#CAFFE_MODEL=genfiles/output_models/ucf/ucf/hydra3_ucf_max_iter_25000.caffemodel
+#CAFFE_MODEL=genfiles/output_models/ucf/ucf/hydra3_trancos_iter_25000.caffemodel
 #DEPLOY=models/ucf/hydra3/hydra3_deploy.prototxt
-#SOLVER=models/ucf/hydra3/hydra3_max_solver.prototxt
+#SOLVER=models/ucf/hydra3/hydra3_solver.prototxt
 
 LOG="experiments/logs/ucf_ccnn_`date +'%Y-%m-%d_%H-%M-%S'`.txt"
 exec &> >(tee -a "$LOG")
