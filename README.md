@@ -117,6 +117,12 @@ In order to download and setup a dataset we recommend to use our scripts:
     ./tools/get_ucsd.sh
     ```
 
+* [UCF dataset](http://crcv.ucf.edu/data/crowd_counting.php):
+
+	```Shell
+    ./tools/get_ucf.sh
+    ```
+
 **Note:** Make sure the folder "data/" does not already contain the dataset.
 
 ### Acknowledgements
