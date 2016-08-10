@@ -98,8 +98,6 @@ To **train** an **test** your own model, you should follow the next steps:
 	```Shell
     ./experiments/scripts/trancos_train_test.sh
     ```
-	
-	**Note**: We understand $PROJECT as the root directory of this project.
     
 ### Download pre-trained models
 
@@ -108,7 +106,7 @@ Comming soon...
 
 ### Download a dataset
 
-In order to download and setup a dataset we recommend to use our scripts:
+In order to download and setup a dataset we recommend to use our scripts. To do so, just place you in the $PROJECT directory and run one of the following commands:
 
 * [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/):
  
