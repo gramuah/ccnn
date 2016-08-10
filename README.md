@@ -29,7 +29,8 @@ Was our code useful for you? Please cite us:
 5. [Usage](#usage)
 6. [Download pre-trained models](#download-pre-trained-models)
 7. [Download a dataset](#download-a-dataset)
-8. [Acknowledgements](#acknowledgements)
+8. [Remarks](#remarks)
+9. [Acknowledgements](#acknowledgements)
 
 ### Requirements: software
 
@@ -88,14 +89,18 @@ After successfully completing [basic installation](#installation-sufficient-for-
 
 ### Usage
 
-To train an test your own model, you should follow the next steps:
+To **train** an **test** your own model, you should follow the next steps:
 
-1. Edit the configuration file "ccnn_trancos_cfg.yml" placed into the corresponding model folder.
-2. Launch the system by:
+1. Edit the configuration file "ccnn_trancos_cfg.yml" placed into the corresponding model folder (e.g.: $PROJECT/models/trancos/ccnn).
+2. Edit the launching script (e.g.: $PROJECT/experiments/scripts/trancos_train_test.sh):
+3. Place you in $PROJECT folder and run the launching script by typing:
 
 	```Shell
     ./experiments/scripts/trancos_train_test.sh
     ```
+	
+	**Note**: We understand $PROJECT as the root directory of this project.
+    
 ### Download pre-trained models
 
 Comming soon...
@@ -124,6 +129,11 @@ In order to download and setup a dataset we recommend to use our scripts:
     ```
 
 **Note:** Make sure the folder "data/" does not already contain the dataset.
+
+### Remarks
+
+In order to provide a better distribution, this repository *unifies and reimplement* in Python some of the original modules. Due the changes in the libraries, the results produced by the pretrained models may have been slightly changed with respect to the numbers provided in the paper.
+
 
 ### Acknowledgements
 This work is supported by the projects of the DGT with references SPIP2014-1468 and SPIP2015-01809, and the project of the MINECO TEC2013-45183-R.
