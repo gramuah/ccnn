@@ -50,5 +50,8 @@ do
   python src/test.py --dev ${GPU_DEV} --prototxt ${DEPLOY} --caffemodel ${CAFFE_MODEL}${IX}.caffemodel --cfg ${CONFIG_FILE}${IX}_cfg.yml
 done
 
+# Print MAE and MSD
+python tool/gen_ucf_results.py --cfg ${CONFIG_FILE}0_cfg.yml
+
 T="$(($(date +%s)-T))"
 echo "Time in seconds: ${T}"

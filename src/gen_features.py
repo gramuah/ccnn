@@ -223,11 +223,12 @@ def initGenFeatFromCfg(cfg_file):
     use_perspective = cfg[dataset].USE_PERSPECTIVE
     perspective_path = cfg[dataset].PERSPECTIVE_MAP
     is_colored = cfg[dataset].COLOR
+    resize_im = cfg[dataset].RESIZE
 
         
     return (dataset, im_folder, im_list_file, output_file, feature_file_path, 
         dot_ending, pw_base, pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, 
-        do_flip, perspective_path, use_perspective, is_colored)
+        do_flip, perspective_path, use_perspective, is_colored, resize_im)
 
 def dispHelp():
     print "======================================================"
@@ -257,7 +258,7 @@ def main(argv):
     print "Loading configuration file: ", cfg_file
     (dataset, im_folder, im_list_file, output_file, feature_file_path, 
     dot_ending, pw_base, pw_norm, pw_dens, sigmadots, Nr, n_scales, split_size, 
-    do_flip, perspective_path, use_perspective, is_colored) = initGenFeatFromCfg(cfg_file)
+    do_flip, perspective_path, use_perspective, is_colored, resize_im) = initGenFeatFromCfg(cfg_file)
     
     print "Choosen parameters:"
     print "-------------------"
@@ -311,6 +312,13 @@ def main(argv):
             dens_im = genPDensity(dot_im, sigmadots, pmap)
         else:
             dens_im = genDensity(dot_im, sigmadots)
+
+        if resize_im > 0:
+            # Resize image
+            im = utl.resizeMaxSize(im, resize_im)
+            gt_sum = dens_im.sum()
+            dens_im = utl.resizeMaxSize(dens_im, resize_im)
+            dens_im = dens_im * gt_sum / dens_im.sum()
 
         # Collect features from random locations        
 #         height, width, _ = im.shape

@@ -19,10 +19,10 @@ def resizeMaxSize(im, max_size):
     im_resized = None
     if w > h:
         s = float(max_size)/w
-        im_resized = ski.transform.resize(im, (int(h*s), max_size))
+        im_resized = resize(im, (int(h*s), max_size))
     else:
         s = float(max_size)/h
-        im_resized = ski.transform.resize(im, (max_size, int(w*s)))
+        im_resized = resize(im, (max_size, int(w*s)))
     
     return im_resized    
 

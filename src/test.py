@@ -209,6 +209,9 @@ def initTestFromCfg(cfg_file):
     # Results output foder
     results_file = cfg[dataset].RESULTS_OUTPUT
 
+    # Resize image
+    resize_im = cfg[dataset].RESIZE
+
     # Patch parameters
     pw = cfg[dataset].PW # Patch with 
     sigmadots = cfg[dataset].SIG # Densities sigma
@@ -219,7 +222,7 @@ def initTestFromCfg(cfg_file):
         
     return (dataset, use_mask, mask_file, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
-            use_perspective, is_colored, results_file)
+            use_perspective, is_colored, results_file, resize_im)
 
 
 def dispHelp(arg0):
@@ -276,7 +279,7 @@ def main(argv):
     print "Loading configuration file: ", cfg_file
     (dataset, use_mask, mask_file, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
-            use_perspective, is_colored, results_file) = initTestFromCfg(cfg_file)
+            use_perspective, is_colored, results_file, resize_im) = initTestFromCfg(cfg_file)
             
     print "Choosen parameters:"
     print "-------------------"
@@ -358,6 +361,13 @@ def main(argv):
             dens_im = genPDensity(dot_im, sigmadots, pmap)
         else:
             dens_im = genDensity(dot_im, sigmadots)
+        
+        if resize_im > 0:
+            # Resize image
+            im = utl.resizeMaxSize(im, resize_im)
+            gt_sum = dens_im.sum()
+            dens_im = utl.resizeMaxSize(dens_im, resize_im)
+            dens_im = dens_im * gt_sum / dens_im.sum()
         
         # Get mask if needed
         if dataset != 'UCSD':

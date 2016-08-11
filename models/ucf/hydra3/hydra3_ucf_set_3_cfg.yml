@@ -13,6 +13,7 @@ UCF:
   USE_MASK: False
   FLIP: True
   USE_PERSPECTIVE: False
+  RESIZE: 800
 
   # Paths and others
   IM_FOLDER: 'data/UCF/images/'

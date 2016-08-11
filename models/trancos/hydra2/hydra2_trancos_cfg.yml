@@ -13,6 +13,7 @@ TRANCOS:
   USE_MASK: True
   FLIP: True
   USE_PERSPECTIVE: False
+  RESIZE: -1 # Disabled
 
   # Paths and others
   IM_FOLDER: 'data/TRANCOS/images/'
