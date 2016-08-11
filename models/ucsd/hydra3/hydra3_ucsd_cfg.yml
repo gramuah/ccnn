@@ -25,6 +25,7 @@ UCSD:
   TRAIN_FEAT_LIST: 'genfiles/features/max_train.txt'
   VAL_FEAT: 'genfiles/features/UCSD_val_feat_'
   VAL_FEAT_LIST: 'genfiles/features/test.txt'
+  RESULTS_OUTPUT: 'genfiles/results/hydra_3s_ucsd_max'
 
   # CNN model params
   CNN_PW_IN: 72    # CNN patch width in

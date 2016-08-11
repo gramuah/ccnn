@@ -25,6 +25,7 @@ TRANCOS:
   TRAIN_FEAT_LIST: 'genfiles/features/train_hydra_2s.txt'
   VAL_FEAT: 'genfiles/features/trancos_val_feat_2s_'
   VAL_FEAT_LIST: 'genfiles/features/test_hydra_2s.txt'
+  RESULTS_OUTPUT: 'genfiles/results/hydra_2s_trancos'
 
   # CNN model params
   CNN_PW_IN: 72    # CNN patch width in

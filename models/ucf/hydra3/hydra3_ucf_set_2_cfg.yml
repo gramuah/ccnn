@@ -25,6 +25,7 @@ UCF:
   TRAIN_FEAT_LIST: 'genfiles/features/train.txt'
   VAL_FEAT: ''
   VAL_FEAT_LIST: ''
+  RESULTS_OUTPUT: 'genfiles/results/hydra_3s_ucf_set_2'
 
   # CNN model params
   CNN_PW_IN: 72    # CNN patch width in

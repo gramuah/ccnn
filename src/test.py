@@ -205,6 +205,9 @@ def initTestFromCfg(cfg_file):
     
     # Im folder
     im_folder = cfg[dataset].IM_FOLDER
+    
+    # Results output foder
+    results_file = cfg[dataset].RESULTS_OUTPUT
 
     # Patch parameters
     pw = cfg[dataset].PW # Patch with 
@@ -216,7 +219,7 @@ def initTestFromCfg(cfg_file):
         
     return (dataset, use_mask, mask_file, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
-            use_perspective, is_colored)
+            use_perspective, is_colored, results_file)
 
 
 def dispHelp(arg0):
@@ -273,7 +276,7 @@ def main(argv):
     print "Loading configuration file: ", cfg_file
     (dataset, use_mask, mask_file, test_names_file, im_folder, 
             dot_ending, pw, sigmadots, n_scales, perspective_path, 
-            use_perspective, is_colored) = initTestFromCfg(cfg_file)
+            use_perspective, is_colored, results_file) = initTestFromCfg(cfg_file)
             
     print "Choosen parameters:"
     print "-------------------"
@@ -390,6 +393,10 @@ def main(argv):
     for l in range(mx_game):
         results[l] = np.mean( game_table[:,l] )
         print "GAME for level %d: %.2f " % (l, np.mean( game_table[:,l] ))
+    
+    # Dump results into a txt file
+    np.savetxt(results_file + '_pred.txt', npredall)
+    np.savetxt(results_file + '_gt.txt', ntrueall)
     
     return 0
 
