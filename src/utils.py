@@ -5,6 +5,27 @@ import numpy as np
 import scipy.io
 from skimage.transform import resize
 
+def resizeMaxSize(im, max_size):
+    """
+    Resize an image leting its maximun size to max_size without modifing its 
+    aspect ratio.
+    @param im: input image
+    @param max_size: maxinum size
+    @return: resized image
+    """
+
+    h,w = im.shape[0:2]
+    
+    im_resized = None
+    if w > h:
+        s = float(max_size)/w
+        im_resized = ski.transform.resize(im, (int(h*s), max_size))
+    else:
+        s = float(max_size)/h
+        im_resized = ski.transform.resize(im, (max_size, int(w*s)))
+    
+    return im_resized    
+
 def cfgFromFile(filename):
     """Load a config file."""
     import yaml
