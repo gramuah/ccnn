@@ -278,6 +278,7 @@ def main(argv):
     print "Number of scales: ", n_scales
     print "Split size: ", split_size
     print "Flip images: ", do_flip
+    print "Resize images: ", resize_im
     print "==================="
     
     print "Reading perspective file"

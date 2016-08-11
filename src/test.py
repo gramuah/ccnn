@@ -286,6 +286,7 @@ def main(argv):
     print "Use only CPU: ", use_cpu
     print "GPU devide: ", gpu_dev
     print "Dataset: ", dataset
+    print "Results files: ", results_file
     print "Test data base location: ", im_folder
     print "Test inmage names: ", test_names_file
     print "Dot image ending: ", dot_ending
@@ -299,6 +300,7 @@ def main(argv):
     print "Prototxt path: ", prototxt_path
     print "Caffemodel path: ", caffemodel_path
     print "Batch size: ", b_size
+    print "Resize images: ", resize_im
     print "==================="
     
     print "----------------------"
