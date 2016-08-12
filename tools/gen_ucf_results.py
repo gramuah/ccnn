@@ -14,27 +14,8 @@ This script read the obtained results of each fold for the UCF experiment and
 prints its MAE and MSD error.
 """
 
-import _init_paths
 import numpy as np
 import sys, getopt
-import utils as utl
-
-
-def initTestFromCfg(cfg_file):
-    '''
-    @brief: initialize all parameter from the cfg file. 
-    '''
-    
-    # Load cfg parameter from yaml file
-    cfg = utl.cfgFromFile(cfg_file)
-    
-    # Fist load the dataset name
-    dataset = cfg.DATASET
-   
-    # Results output foder
-    results_file = cfg[dataset].RESULTS_OUTPUT
-        
-    return (dataset, results_file)
 
 
 def dispHelp(arg0):
@@ -42,7 +23,7 @@ def dispHelp(arg0):
     print "                       Usage"
     print "======================================================"
     print "\t-h display this message"
-    print "\t--cfg <config file yaml>"
+    print "\t--results <config file yaml>"
 
 def main(argv):
     UCF_K = 5
@@ -51,7 +32,7 @@ def main(argv):
 
     # Get parameters
     try:
-        opts, _ = getopt.getopt(argv, "h:", ["cfg="])
+        opts, _ = getopt.getopt(argv, "h:", ["results="])
     except getopt.GetoptError as err:
         print "Error while parsing parameters: ", err
         dispHelp(argv[0])
@@ -61,27 +42,21 @@ def main(argv):
         if opt == '-h':
             dispHelp(argv[0])
             return
-        elif opt in ("--cfg"):
-            cfg_file = arg
-
-    # Read ucf results prefix
-    results_prefix = initTestFromCfg(cfg_file)
+        elif opt in ("--results"):
+            results_prefix = arg
 
     # MAE and STD vectors
     mae_v = np.zeros(UCF_K)
     std_v = np.zeros(UCF_K)
     for i in range(UCF_K):
-        gt_file = results_prefix + "{}_gt.npy".format(i)
-        pred_file = results_prefix + "{}_pred.npy".format(i)
-        
-        gt = np.load(gt_file)
-        pred = np.load(pred_file)
-        
+        # Read data
+        gt_file = results_prefix + "{}_gt.txt".format(i)
+        pred_file = results_prefix + "{}_pred.txt".format(i)
+        gt = np.loadtxt(gt_file)
+        pred = np.loadtxt(pred_file)
+
+        # Compute error
         diff = gt - pred
-        
-        print gt
-        print pred
-        
         mae_v[i] = np.mean( np.abs( diff ) )
         std_v[i] = np.std(diff)
     
