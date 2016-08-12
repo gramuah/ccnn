@@ -12,7 +12,7 @@ GPU_DEV=0
 
 # CCNN
 CONFIG_FILE=models/ucf/ccnn/ccnn_ucf_set_ 
-CAFFE_MODEL=models/pretrained_models/ucf/ccnn/ucv_ccnn_
+CAFFE_MODEL=genfiles/output_models/ucf/ucf/ccnn_ucf_iter_50000.caffemodel
 DEPLOY=models/ucf/ccnn/ccnn_deploy.prototxt
 SOLVER=models/ucf/ccnn/ccnn_solver.prototxt
 
@@ -47,7 +47,7 @@ do
   mv  ${CAFFE_MODEL} ${CAFFE_MODEL}_${IX}
   
   # Test Net
-  python src/test.py --dev ${GPU_DEV} --prototxt ${DEPLOY} --caffemodel ${CAFFE_MODEL}${IX}.caffemodel --cfg ${CONFIG_FILE}${IX}_cfg.yml
+  python src/test.py --dev ${GPU_DEV} --prototxt ${DEPLOY} --caffemodel ${CAFFE_MODEL}_${IX} --cfg ${CONFIG_FILE}${IX}_cfg.yml
 done
 
 # Print MAE and MSD
