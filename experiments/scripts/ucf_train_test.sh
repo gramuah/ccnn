@@ -35,20 +35,20 @@ echo Logging output to "$LOG"
 # Time the task
 T="$(date +%s)"
 
-#for IX in 0 1 2 3 4
-#do
-##  # Generate Features
-##  python src/gen_features.py --cfg ${CONFIG_FILE}${IX}_cfg.yml
+for IX in 0 1 2 3 4
+do
+  # Generate Features
+  python src/gen_features.py --cfg ${CONFIG_FILE}${IX}_cfg.yml
 
-##  # Train Net
-##  caffe train -solver ${SOLVER}
+  # Train Net
+  caffe train -solver ${SOLVER}
 
-##  # Rename net in order to do not overwrite it in the next iteration
-##  mv  ${CAFFE_MODEL} ${CAFFE_MODEL}_${IX}
-#  
-#  # Test Net
-#  python src/test.py --dev ${GPU_DEV} --prototxt ${DEPLOY} --caffemodel ${CAFFE_MODEL}${IX}.caffemodel --cfg ${CONFIG_FILE}${IX}_cfg.yml
-#done
+  # Rename net in order to do not overwrite it in the next iteration
+  mv  ${CAFFE_MODEL} ${CAFFE_MODEL}_${IX}
+  
+  # Test Net
+  python src/test.py --dev ${GPU_DEV} --prototxt ${DEPLOY} --caffemodel ${CAFFE_MODEL}${IX}.caffemodel --cfg ${CONFIG_FILE}${IX}_cfg.yml
+done
 
 # Print MAE and MSD
 python tools/gen_ucf_results.py --results genfiles/results/ccnn_ucf_set_
