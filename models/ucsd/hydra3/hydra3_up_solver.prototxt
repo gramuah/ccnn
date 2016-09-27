@@ -10,6 +10,6 @@ display: 20
 max_iter: 25000
 momentum: 0.9
 weight_decay: 0.001
-snapshot: 10000
+snapshot: 25000
 snapshot_prefix: "genfiles/output_models/ucsd/hydra3/hydra3_ucsd_up"
 solver_mode: GPU

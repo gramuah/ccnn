@@ -10,6 +10,6 @@ display: 20
 max_iter: 30000
 momentum: 0.9
 weight_decay: 0.001
-snapshot: 2500
+snapshot: 30000
 snapshot_prefix: "genfiles/output_models/trancos/hydra2/hydra2_trancos"
 solver_mode: GPU
