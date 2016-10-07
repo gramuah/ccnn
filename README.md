@@ -4,24 +4,30 @@ By [Daniel Oñoro-Rubio](https://es.linkedin.com/in/daniel-oñoro-71062756) and 
 
 GRAM, University of Alcalá, Alcalá de Henares, Spain.
 
-This is the official code implementation of work described the [paper](http://agamenon.tsc.uah.es/Investigacion/gram/publications/eccv2016-onoro.pdf). In this repository, we include the implementation of CCNN and Hydra.
+This is the official code implementation of the work described in our [ECCV 2016 paper](http://agamenon.tsc.uah.es/Investigacion/gram/publications/eccv2016-onoro.pdf). 
 
-### License
 
-The license information of this project is described in the file "LICENSE.txt".
+This repository provides the implementation of CCNN and Hydra models for object counting.
 
-### Cite us
+## Cite us
 
 Was our code useful for you? Please cite us:
 
     @inproceedings{onoro2016,
-        Author = {O\~noro-Rubio, D. and L\'opez-Sastre, R.},
+        Author = {O\~noro-Rubio, D. and L\'opez-Sastre, R.~J.},
         Title = {Towards perspective-free object counting with deep learning},
         Booktitle = {ECCV},
         Year = {2016}
     }
 
-### Contents
+
+## License
+
+The license information of this project is described in the file "LICENSE.txt".
+
+
+
+## Contents
 1. [Requirements: software](#requirements-software)
 2. [Requirements: hardware](#requirements-hardware)
 3. [Basic installation](#installation-sufficient-for-the-demo)
