@@ -65,33 +65,46 @@ This code allows the usage of CPU and GPU, but we strongly recommend the usage o
 
 ### Basic installation (sufficient for the demo)
 
-1. Be sure you have added to your `PATH` the `tools` directory of your `Caffe` compilation:
+1. Be sure you have added to your `PATH` the `tools` directory of your `Caffe` installation:
 
     ```Shell
     export PATH=$CAFFE_ROOT/build/tools:$PATH
     ```
     
 2. Be sure you have added your `pycaffe` compilation into your `PYTHONPATH`:
-
-	```Shell
+    
+    ```Shell
     export PYTHONPATH=$CAFFE_ROOT/python:$PYTHONPATH
     ```
-
-3. Download the [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/) by executing the following command:
-
-	```Shell
-    ./tools/get_trancos.sh
-    ```
-
-4. Download the TRANCOS CCNN model. **Comming soon**
     
 ### Demo
 
-After successfully completing [basic installation](#installation-sufficient-for-the-demo), you'll be ready to run the demo.
+We here provide a demo consisting in predicting the number of vehicles in the test images of the [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/), which was used in our ECCV paper. 
 
-	```
-	./tools/demo.sh
-	```
+This demo uses the CCNN model described in the paper. The results reported in the paper can be reproduced with this demo.
+
+To run the demo, these are the steps to follow:
+
+1. Download the TRANCOS dataset by executing the following script provided:
+
+```Shell
+./tools/get_trancos.sh
+```
+
+2. You must have now a new directory with the TRANCOS dataset in the path `data/TRANCOS`.
+
+3. Download the TRANCOS CCNN pretrained model.
+
+```Shell
+./tools/get_trancos_model.sh
+```
+
+4. Finally, to run the demo, simply execute the following command:
+
+```Shell
+./tools/demo.sh
+```
+
 
 ### Usage
 
@@ -136,7 +149,7 @@ In order to download and setup a dataset we recommend to use our scripts. To do 
 
 ### Remarks
 
-In order to provide a better distribution, this repository *unifies and reimplement* in Python some of the original modules. Due the changes in the libraries, the results produced by the pretrained models may have been slightly changed with respect to the numbers provided in the paper.
+In order to provide a better distribution, this repository *unifies and reimplements* in Python some of the original modules. Due to these changes in the libraries used, the results produced by this software might be slightly different from the ones reported in the paper.
 
 
 ### Acknowledgements

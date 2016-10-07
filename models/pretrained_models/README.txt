@@ -1,1 +1,1 @@
-Paper models goes here.
+Paper models go here.

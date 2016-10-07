@@ -1,7 +1,5 @@
 #! /bin/bash
 
-# Usage:
-# ./experiments/scripts/train_net.sh GPU_ID
 
 export PYTHONUNBUFFERED="True"
 

@@ -1,1 +1,1 @@
-Place here TRANCOS, UCSD or UCF dataset/s.
+TRANCOS, UCSD or UCF datasets will be placed here.

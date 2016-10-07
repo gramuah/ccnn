@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Downlaod dataset
+# Download dataset
 wget http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/TRANCOS_v3.tar.gz
 
 # Untar
