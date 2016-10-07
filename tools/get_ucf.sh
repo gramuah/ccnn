@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Downlaod dataset
+# Download dataset
 wget http://crcv.ucf.edu/data/UCFCrowdCountingDataset_CVPR13.rar
 
 # Extract
@@ -13,7 +13,7 @@ mkdir data/UCF/images
 mkdir data/UCF/image_sets
 mkdir data/UCF/params
 
-# Move notated images
+# Move annnotated images
 mv UCFCrowdCountingDataset_CVPR13/*.jpg data/UCF/images
 mv UCFCrowdCountingDataset_CVPR13/*.mat data/UCF/params
 

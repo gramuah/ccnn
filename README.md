@@ -30,7 +30,7 @@ The license information of this project is described in the file "LICENSE.txt".
 ## Contents
 1. [Requirements: software](#requirements-software)
 2. [Requirements: hardware](#requirements-hardware)
-3. [Basic installation](#installation-sufficient-for-the-demo)
+3. [Basic installation](#basic-installation-sufficient-for-the-demo)
 4. [Demo](#demo)
 5. [Usage](#usage)
 6. [Download pre-trained models](#download-pre-trained-models)
@@ -102,27 +102,13 @@ To run the demo, these are the steps to follow:
 	./tools/demo.sh
 	```
 
+### How to reproduce the results of the paper?
 
-### Usage
+We provide here the scripts needed to **train** and **test** all the models (CCNN and Hydra) with the datasets used in our ECCV paper. These are the steps to follow.
 
-To **train** an **test** your own model, you should follow the next steps:
+#### Download a dataset
 
-1. Edit the configuration file "ccnn_trancos_cfg.yml" placed into the corresponding model folder (e.g.: $PROJECT/models/trancos/ccnn).
-2. Edit the launching script (e.g.: $PROJECT/experiments/scripts/trancos_train_test.sh):
-3. Place you in $PROJECT folder and run the launching script by typing:
-
-	```Shell
-    ./experiments/scripts/trancos_train_test.sh
-    ```
-    
-### Download pre-trained models
-
-Comming soon...
-
-
-### Download a dataset
-
-In order to download and setup a dataset we recommend to use our scripts. To do so, just place you in the $PROJECT directory and run one of the following commands:
+In order to download and setup a dataset we recommend to use our scripts. To do so, just place you in the $PROJECT directory and run one of the following scripts:
 
 * [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/):
  
@@ -141,6 +127,30 @@ In order to download and setup a dataset we recommend to use our scripts. To do 
 	```Shell
     ./tools/get_ucf.sh
     ```
+
+
+#### Download pre-trained models
+
+### Train/test
+
+
+1. Edit the configuration file 
+
+ `ccnn_trancos_cfg.yml` which can be found in the folde `models/trancos/ccnn`.
+2. Edit the launching script (e.g.: $PROJECT/experiments/scripts/trancos_train_test.sh):
+3. Place you in $PROJECT folder and run the launching script by typing:
+
+	```Shell
+    ./experiments/scripts/trancos_train_test.sh
+    ```
+    
+### Download pre-trained models
+
+Comming soon...
+
+
+### Download a dataset
+
 
 **Note:** Make sure the folder "data/" does not already contain the dataset.
 
