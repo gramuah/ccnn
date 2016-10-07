@@ -32,11 +32,9 @@ The license information of this project is described in the file "LICENSE.txt".
 2. [Requirements: hardware](#requirements-hardware)
 3. [Basic installation](#basic-installation-sufficient-for-the-demo)
 4. [Demo](#demo)
-5. [Usage](#usage)
-6. [Download pre-trained models](#download-pre-trained-models)
-7. [Download a dataset](#download-a-dataset)
-8. [Remarks](#remarks)
-9. [Acknowledgements](#acknowledgements)
+5. [How to reproduce the results of the paper](#how-to-reproduce-the-results-of-the-paper)
+6. [Remarks](#remarks)
+7. [Acknowledgements](#acknowledgements)
 
 ### Requirements: software
 
