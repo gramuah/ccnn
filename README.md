@@ -128,31 +128,27 @@ In order to download and setup a dataset we recommend to use our scripts. To do 
     ./tools/get_ucf.sh
     ```
 
+**Note:** Make sure the folder "data/" does not already contain the dataset.
+
 
 #### Download pre-trained models
 
-### Train/test
+All our pre-trained models can be downloaded using the following script:
 
+	```Shell
+    ./tools/get_all_models.sh
+    ```
 
-1. Edit the configuration file 
+#### Train/test the model chosen
 
- `ccnn_trancos_cfg.yml` which can be found in the folde `models/trancos/ccnn`.
-2. Edit the launching script (e.g.: $PROJECT/experiments/scripts/trancos_train_test.sh):
+1. Edit the launching script (e.g.: $PROJECT/experiments/scripts/trancos_train_test.sh).
+
 3. Place you in $PROJECT folder and run the launching script by typing:
 
 	```Shell
-    ./experiments/scripts/trancos_train_test.sh
+    ./experiments/scripts/DATASET_CHOSEN_train_test.sh
     ```
-    
-### Download pre-trained models
 
-Comming soon...
-
-
-### Download a dataset
-
-
-**Note:** Make sure the folder "data/" does not already contain the dataset.
 
 ### Remarks
 
