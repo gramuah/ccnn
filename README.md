@@ -86,24 +86,21 @@ This demo uses the CCNN model described in the paper. The results reported in th
 To run the demo, these are the steps to follow:
 
 1. Download the TRANCOS dataset by executing the following script provided:
-
-```Shell
-./tools/get_trancos.sh
-```
+	```Shell
+	./tools/get_trancos.sh
+	```
 
 2. You must have now a new directory with the TRANCOS dataset in the path `data/TRANCOS`.
 
 3. Download the TRANCOS CCNN pretrained model.
-
-```Shell
-./tools/get_trancos_model.sh
-```
+	```Shell
+	./tools/get_trancos_model.sh
+	```
 
 4. Finally, to run the demo, simply execute the following command:
-
-```Shell
-./tools/demo.sh
-```
+	```Shell
+	./tools/demo.sh
+	```
 
 
 ### Usage
