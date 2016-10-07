@@ -43,7 +43,7 @@ The license information of this project is described in the file "LICENSE.txt".
 1. Use a Linux distribution. We have developed and tested the code on [Ubuntu](http://www.ubuntu.com/).
 
 
-2. Requirements for `Caffe` and `pycaffe`. Follow the [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html)).
+2. Requirements for `Caffe` and `pycaffe`. Follow the [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html).
 
   **Note:** Caffe *must* be built with support for Python layers!
 
@@ -57,13 +57,13 @@ The license information of this project is described in the file "LICENSE.txt".
 
 ### Requirements: hardware
 
-This code allows the usage of CPU and GPU. We strongly recommend the usage the GPU due it is going to short the training and testing time by a factor of 10 or so.
+This code allows the usage of CPU and GPU, but we strongly recommend the usage of GPU.
 
-1. For training, we recommend having a GPU with at least 3GB of memory.
+1. For training, we recommend using a GPU with at least 3GB of memory.
 
-2. For testing, a GPU with 2GB memory is enough.
+2. For testing, a GPU with 2GB of memory is enough.
 
-### Installation (sufficient for the demo)
+### Basic installation (sufficient for the demo)
 
 1. Be sure you have added to your `PATH` the `tools` directory of your `Caffe` compilation:
 
