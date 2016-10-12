@@ -66,13 +66,13 @@ This code allows the usage of CPU and GPU, but we strongly recommend the usage o
 1. Be sure you have added to your `PATH` the `tools` directory of your `Caffe` installation:
 
     ```Shell
-    export PATH=$CAFFE_ROOT/build/tools:$PATH
+    export PATH=<your_caffe_root_path>/build/tools:$PATH
     ```
     
 2. Be sure you have added your `pycaffe` compilation into your `PYTHONPATH`:
     
     ```Shell
-    export PYTHONPATH=$CAFFE_ROOT/python:$PYTHONPATH
+    export PYTHONPATH=<your_caffe_root_path>/python:$PYTHONPATH
     ```
     
 ### Demo
