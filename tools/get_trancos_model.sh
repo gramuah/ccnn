@@ -7,6 +7,7 @@ wget http://agamenon.tsc.uah.es/Personales/rlopez/data/ccnn/trancos_ccnn.caffemo
 tar -zxvf trancos_ccnn.caffemodel.tar.gz
 
 # Create dir and move file to the pretrained models dir
+mkdir models/pretrained_models/trancos
 mkdir models/pretrained_models/trancos/ccnn
 mv trancos_ccnn.caffemodel models/pretrained_models/trancos/ccnn
 
