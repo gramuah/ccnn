@@ -134,7 +134,7 @@ In order to download and setup a dataset we recommend to use our scripts. To do 
 All our pre-trained models can be downloaded using the following script:
 
 	```Shell
-    ./tools/get_all_models.sh
+    ./tools/get_all_trancos_models.sh
     ```
 
 #### Train/test the model chosen
