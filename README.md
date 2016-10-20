@@ -106,7 +106,7 @@ We provide here the scripts needed to **train** and **test** all the models (CCN
 
 #### Download a dataset
 
-In order to download and setup a dataset we recommend to use our scripts. To do so, just place you in the $PROJECT directory and run one of the following scripts:
+In order to download and setup a dataset we recommend to use our scripts. To do so, just place yourself in the $PROJECT directory and run one of the following scripts:
 
 * [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/):
  
@@ -131,15 +131,15 @@ In order to download and setup a dataset we recommend to use our scripts. To do 
 
 #### Download pre-trained models
 
-All our pre-trained models can be downloaded using the following script:
+All our pre-trained models can be downloaded using the corresponding script:
 
 	```Shell
-    ./tools/get_all_trancos_models.sh
+    ./tools/get_all_DATASET_CHOSEN_models.sh
     ```
 
 #### Train/test the model chosen
 
-1. Edit the launching script (e.g.: $PROJECT/experiments/scripts/trancos_train_test.sh).
+1. Edit the launching script (e.g.: $PROJECT/experiments/scripts/DATASET_CHOSEN_train_test.sh).
 
 3. Place you in $PROJECT folder and run the launching script by typing:
 
