@@ -10,7 +10,7 @@
 '''
 
 """
-This script creates convert the perspective map and the roi fo the UCSD dataset
+This script converts the perspective map and the roi of the UCSD dataset
 to the supported format.
 """
 
@@ -48,7 +48,7 @@ def main(argv):
         elif opt in ("--output"):
             output = arg
 
-    # Excatract and convert mask
+    # Extract and convert mask
     mask_file = os.path.join( notation_folder, 'vidf1_33_roi_mainwalkway.mat' )
     m_obj = scio.loadmat(mask_file, struct_as_record=False, squeeze_me=True)
     mask = m_obj['roi'].mask
@@ -58,7 +58,7 @@ def main(argv):
         f.create_dataset('mask', data=mask)
         f.close()
     
-    # Excatract and convert perspective map
+    # Extract and convert perspective map
     pmap_file = os.path.join( notation_folder, 'vidf1_33_dmap3.mat' )
     p_obj = scio.loadmat(pmap_file, struct_as_record=False, squeeze_me=True)
     pmap = p_obj['dmap'].pmapx
