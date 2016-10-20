@@ -29,7 +29,7 @@ rm trancos_hydra3.caffemodel.tar.gz
 wget http://agamenon.tsc.uah.es/Personales/rlopez/data/ccnn/trancos_hydra4.caffemodel.tar.gz
 tar -zxvf trancos_hydra4.caffemodel.tar.gz
 mkdir models/pretrained_models/trancos/hydra4
-mv trancos_hydra4.caffemodel models/pretrained_models/hydra4
+mv trancos_hydra4.caffemodel models/pretrained_models/trancos/hydra4
 rm trancos_hydra4.caffemodel.tar.gz
 
 
