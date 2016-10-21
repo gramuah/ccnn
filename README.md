@@ -138,11 +138,22 @@ All our pre-trained models can be downloaded using the corresponding script:
     ```
 Simply substitute DATASET_CHOSEN by: trancos, ucsd or ucf.
 
+### Test the pretrained models
+1. Edit the corresponding script $PROJECT/experiments/scripts/DATASET_CHOSEN_test_pretrained.sh
+
+2. Run the corresponding scripts.
+
+       ```Shell
+    ./experiments/scripts/DATASET_CHOSEN_test_pretrained.sh
+    ```
+Note that this pretrained models will let you reproduce the results in our paper.
+
+
 #### Train/test the model chosen
 
 1. Edit the launching script (e.g.: $PROJECT/experiments/scripts/DATASET_CHOSEN_train_test.sh).
 
-3. Place you in $PROJECT folder and run the launching script by typing:
+2. Place you in $PROJECT folder and run the launching script by typing:
 
 	```Shell
     ./experiments/scripts/DATASET_CHOSEN_train_test.sh
