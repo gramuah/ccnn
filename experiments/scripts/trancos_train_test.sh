@@ -8,7 +8,7 @@ export PYTHONUNBUFFERED="True"
 # Parameters
 GPU_DEV=0
 
-# Uncoment one of the following set of parameters
+# Uncomment one of the following set of parameters
 
 # CCNN
 CONFIG_FILE=models/trancos/ccnn/ccnn_trancos_cfg.yml
