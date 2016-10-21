@@ -50,7 +50,7 @@ The license information of this project is described in the file "LICENSE.txt".
   WITH_PYTHON_LAYER := 1
   ```
 
-3. Python packages you need: `cython`, `python-opencv`, `python-h5py`, `easydict`, `opencv`.
+3. Python packages you need: `cython`, `python-opencv`, `python-h5py`, `easydict`, `pillow (version >= 3.4.2)`.
 
 
 ### Requirements: hardware

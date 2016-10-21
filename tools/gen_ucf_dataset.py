@@ -10,8 +10,7 @@
 '''
 
 """
-This script creates the "maximal", "downscale", "upscale" and "minimal"
-datasets for training and testing.
+This script creates the defferent test/train sets
 """
 
 import sys, getopt, os
