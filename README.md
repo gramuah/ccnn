@@ -136,6 +136,7 @@ All our pre-trained models can be downloaded using the corresponding script:
 	```Shell
     ./tools/get_all_DATASET_CHOSEN_models.sh
     ```
+Simply substitute DATASET_CHOSEN by: trancos, ucsd or ucf.
 
 #### Train/test the model chosen
 
