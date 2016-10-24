@@ -13,7 +13,16 @@ GPU_DEV=0
 CONFIG_FILE=models/ucf/ccnn/ccnn_ucf_set_ 
 CAFFE_MODEL=models/pretrained_models/ucf/ccnn/ucf_ccnn
 DEPLOY=models/ucf/ccnn/ccnn_deploy.prototxt
-SOLVER=models/ucf/ccnn/ccnn_solver.prototxt
+
+# HYDRA 2s
+#CONFIG_FILE=models/ucf/hydra2/hydra2_ucf_set_
+#CAFFE_MODEL=models/pretrained_models/ucf/hydra2/ucf_hydra2
+#DEPLOY=models/ucf/hydra2/hydra2_deploy.prototxt
+
+# HYDRA 3s
+#CONFIG_FILE=models/ucf/hydra3/hydra3_ucf_set_
+#CAFFE_MODEL=models/pretrained_models/ucf/hydra3/ucf_hydra3
+#DEPLOY=models/ucf/hydra3/hydra3_deploy.prototxt
 
 LOG="experiments/logs/ucf_ccnn_`date +'%Y-%m-%d_%H-%M-%S'`.txt"
 exec &> >(tee -a "$LOG")
