@@ -8,7 +8,7 @@ export PYTHONUNBUFFERED="True"
 # Parameters
 GPU_DEV=0
 
-# Modify to run other model
+# Parameters, uncomment one of the following set of parameters
 # CCNN
 CONFIG_FILE=models/ucf/ccnn/ccnn_ucf_set_ 
 CAFFE_MODEL=models/pretrained_models/ucf/ccnn/ucf_ccnn
