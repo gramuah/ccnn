@@ -18,13 +18,13 @@ SOLVER=models/ucsd/ccnn/ccnn_max_solver.prototxt
 
 # HYDRA 2s
 #CONFIG_FILE=models/ucsd/hydra2/hydra2_ucsd_cfg.yml
-#CAFFE_MODEL=genfiles/output_models/ucsd/ucsd/hydra2_ucsd_max_iter_25000.caffemodel
+#CAFFE_MODEL=genfiles/output_models/ucsd/hydra2/hydra2_ucsd_max_iter_25000.caffemodel
 #DEPLOY=models/ucsd/hydra2/hydra2_deploy.prototxt
 #SOLVER=models/ucsd/hydra2/hydra2_max_solver.prototxt
 
 # HYDRA 3s
 #CONFIG_FILE=models/ucsd/hydra3/hydra3_ucsd_cfg.yml
-#CAFFE_MODEL=genfiles/output_models/ucsd/ucsd/hydra3_ucsd_max_iter_25000.caffemodel
+#CAFFE_MODEL=genfiles/output_models/ucsd/hydra3/hydra3_ucsd_max_iter_25000.caffemodel
 #DEPLOY=models/ucsd/hydra3/hydra3_deploy.prototxt
 #SOLVER=models/ucsd/hydra3/hydra3_max_solver.prototxt
 
