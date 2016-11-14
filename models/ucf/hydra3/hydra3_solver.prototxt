@@ -1,4 +1,4 @@
-net: "models/ucf/ccnn/hydra2_train_val.prototxt"
+net: "models/ucf/ccnn/hydra3_train_val.prototxt"
 test_iter: 100
 test_interval: 500
 base_lr: 0.0001

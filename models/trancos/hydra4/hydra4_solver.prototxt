@@ -1,4 +1,4 @@
-net: "configs/cnn_trancos/hydra4_train_val.prototxt"
+net: "models/trancos/hydra4/hydra4_train_val.prototxt"
 test_iter: 100
 test_interval: 500
 base_lr: 0.0001

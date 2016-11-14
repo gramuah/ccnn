@@ -1,4 +1,4 @@
-net: "models/trancos/trancos/hydra2_train_val.prototxt"
+net: "models/trancos/hydra2/hydra2_train_val.prototxt"
 test_iter: 100
 test_interval: 500
 base_lr: 0.0001
