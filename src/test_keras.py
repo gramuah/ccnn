@@ -34,6 +34,9 @@ from gen_features import genDensity, genPDensity, loadImage, extractEscales
 #import caffe
 import cv2
 
+# Keras modules
+from keras.models import load_model
+
 
 #===========================================================================
 # Code 
@@ -52,6 +55,72 @@ class CaffePredictor:
         for s in range(n_scales):
             scale_name = 'data_s{}'.format(s)
             self.net.blobs[scale_name].reshape(b_shape[0],b_shape[1],b_shape[2],b_shape[3])
+
+    # Probably it is not the eficient way to do it...
+    def process(self, im, base_pw):
+        # Compute dense positions where to extract patches
+        [heith, width] = im.shape[0:2]
+        pos = utl.get_dense_pos(heith, width, base_pw, stride=10)
+
+        # Initialize density matrix and vouting count
+        dens_map = np.zeros( (heith, width), dtype = np.float32 )   # Init density to 0
+        count_map = np.zeros( (heith, width), dtype = np.int32 )     # Number of votes to divide
+        
+        # Iterate for all patches
+        for ix, p in enumerate(pos):
+            # Compute displacement from centers
+            dx=dy=int(base_pw/2)
+    
+            # Get roi
+            x,y=p
+            sx=slice(x-dx,x+dx+1,None)
+            sy=slice(y-dy,y+dy+1,None)
+            crop_im=im[sx,sy,...]
+            h, w = crop_im.shape[0:2]
+            if h!=w or (h<=0):
+                continue
+            
+            # Get all the scaled images
+            im_scales = extractEscales([crop_im], self._n_scales)
+            
+            # Load and forward CNN
+            for s in range(self._n_scales):
+                data_name = 'data_s{}'.format(s)
+                self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
+            self.net.forward()
+            
+            # Take the output from the last layer
+            # Access to the last layer of the net, second element of the tuple (layer, caffe obj)
+            pred = self.net.blobs.items()[-1][1].data
+            
+            # Make it squared
+            p_side = int(np.sqrt( len( pred.flatten() ) )) 
+            pred = pred.reshape(  (p_side, p_side) )
+            
+            # Resize it back to the original size
+            pred = utl.resizeDensityPatch(pred, crop_im.shape[0:2])          
+            pred[pred<0] = 0
+
+            # Sumup density map into density map and increase count of votes
+            dens_map[sx,sy] += pred
+            count_map[sx,sy] += 1
+
+        # Remove Zeros
+        count_map[ count_map == 0 ] = 1
+
+        # Average density map
+        dens_map = dens_map / count_map        
+        
+        return dens_map
+
+class KerasPredictor:
+
+    def __init__(self, kerasmodel, n_scales):
+
+        self.net = load_model(kerasmodel)
+        print self.net.summary()
+
+        self._n_scales = n_scales
 
     # Probably it is not the eficient way to do it...
     def process(self, im, base_pw):
@@ -301,6 +370,7 @@ def main(argv):
     print "Caffemodel path: ", caffemodel_path
     print "Batch size: ", b_size
     print "Resize images: ", resize_im
+    print "Colored: ", is_colored
     print "==================="
     
     print "----------------------"
@@ -333,7 +403,7 @@ def main(argv):
     
     print "Reading image file names:"
     im_names = np.loadtxt(test_names_file, dtype='str')
-    
+
     # Perform test
     ntrueall=[]
     npredall=[]
@@ -343,22 +413,27 @@ def main(argv):
     game_table = np.zeros( (n_im, mx_game) )
     
     # Init CNN
-    CNN = CaffePredictor(prototxt_path, caffemodel_path, n_scales)
+    #CNN = CaffePredictor(prototxt_path, caffemodel_path, n_scales)
+    CNN = KerasPredictor("models/pretrained_models/trancos/ccnn/trancos_ccnn_keras.h5", n_scales)
     
-    print 
+    print ""
     print "Start prediction ..."
     count = 0
     gt_vector = np.zeros((len(im_names)))
     pred_vector = np.zeros((len(im_names)))    
     
     for ix, name in enumerate(im_names):
+        
         # Get image paths
         im_path = utl.extendName(name, im_folder)
         dot_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=dot_ending)
-
+        
         # Read image files
+        print "Test image:", im_path
         im = loadImage(im_path, color = is_colored)
+        print "Shape of test image:", im.shape
         dot_im = loadImage(dot_im_path, color = True)
+        print "Shape of dot image:", dot_im.shape
         
         # Generate features
         if use_perspective:
@@ -379,6 +454,7 @@ def main(argv):
                 mask_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=mask_file)
                 mask = sio.loadmat(mask_im_path, chars_as_strings=1, matlab_compatible=1)
                 mask = mask.get('BW')
+                print "Shape of Mask:", mask.shape
         
         s=time.time()
         ntrue,npred,resImg,gtdots=testOnImg(CNN, im, dens_im, pw, mask)

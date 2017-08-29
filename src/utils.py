@@ -240,7 +240,7 @@ def extendName(name, im_folder, use_ending=False, pattern=[]):
         @param pattern: string that will substitute the original file ending. 
         @return new_name: list which contains all the converted names.
     '''    
-    final_name = im_folder + os.path.sep + name
+    final_name = im_folder + name #os.path.sep + name
     
     if use_ending:
         l_dot = final_name.rfind('.')
