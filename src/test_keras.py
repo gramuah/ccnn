@@ -31,7 +31,7 @@ import time
 import numpy as np
 import utils as utl
 from gen_features import genDensity, genPDensity, loadImage, extractEscales
-import caffe
+#import caffe
 import cv2
 
 
@@ -288,7 +288,7 @@ def main(argv):
     print "Dataset: ", dataset
     print "Results files: ", results_file
     print "Test data base location: ", im_folder
-    print "Test inmage names: ", test_names_file
+    print "Test image names: ", test_names_file
     print "Dot image ending: ", dot_ending
     print "Use mask: ", use_mask
     print "Mask pattern: ", mask_file
@@ -307,6 +307,7 @@ def main(argv):
     print "Preparing for Testing"
     print "======================"
     
+    """
     # Set GPU CPU setting
     if use_cpu:
         caffe.set_mode_cpu()
@@ -314,6 +315,7 @@ def main(argv):
         # Use GPU
         caffe.set_device(gpu_dev)
         caffe.set_mode_gpu()
+    """
 
     print "Reading perspective file"
     if use_perspective:
@@ -331,7 +333,7 @@ def main(argv):
     
     print "Reading image file names:"
     im_names = np.loadtxt(test_names_file, dtype='str')
-
+    
     # Perform test
     ntrueall=[]
     npredall=[]
