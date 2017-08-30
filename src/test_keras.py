@@ -56,63 +56,6 @@ class CaffePredictor:
             scale_name = 'data_s{}'.format(s)
             self.net.blobs[scale_name].reshape(b_shape[0],b_shape[1],b_shape[2],b_shape[3])
 
-    # Probably it is not the eficient way to do it...
-    def process(self, im, base_pw):
-        # Compute dense positions where to extract patches
-        [heith, width] = im.shape[0:2]
-        pos = utl.get_dense_pos(heith, width, base_pw, stride=10)
-
-        # Initialize density matrix and vouting count
-        dens_map = np.zeros( (heith, width), dtype = np.float32 )   # Init density to 0
-        count_map = np.zeros( (heith, width), dtype = np.int32 )     # Number of votes to divide
-        
-        # Iterate for all patches
-        for ix, p in enumerate(pos):
-            # Compute displacement from centers
-            dx=dy=int(base_pw/2)
-    
-            # Get roi
-            x,y=p
-            sx=slice(x-dx,x+dx+1,None)
-            sy=slice(y-dy,y+dy+1,None)
-            crop_im=im[sx,sy,...]
-            h, w = crop_im.shape[0:2]
-            if h!=w or (h<=0):
-                continue
-            
-            # Get all the scaled images
-            im_scales = extractEscales([crop_im], self._n_scales)
-            
-            # Load and forward CNN
-            for s in range(self._n_scales):
-                data_name = 'data_s{}'.format(s)
-                self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
-            self.net.forward()
-            
-            # Take the output from the last layer
-            # Access to the last layer of the net, second element of the tuple (layer, caffe obj)
-            pred = self.net.blobs.items()[-1][1].data
-            
-            # Make it squared
-            p_side = int(np.sqrt( len( pred.flatten() ) )) 
-            pred = pred.reshape(  (p_side, p_side) )
-            
-            # Resize it back to the original size
-            pred = utl.resizeDensityPatch(pred, crop_im.shape[0:2])          
-            pred[pred<0] = 0
-
-            # Sumup density map into density map and increase count of votes
-            dens_map[sx,sy] += pred
-            count_map[sx,sy] += 1
-
-        # Remove Zeros
-        count_map[ count_map == 0 ] = 1
-
-        # Average density map
-        dens_map = dens_map / count_map        
-        
-        return dens_map
-
 class KerasPredictor:
 
     def __init__(self, kerasmodel, n_scales):
@@ -127,6 +70,7 @@ class KerasPredictor:
         # Compute dense positions where to extract patches
         [heith, width] = im.shape[0:2]
         pos = utl.get_dense_pos(heith, width, base_pw, stride=10)
+        print "pos:", pos
 
         # Initialize density matrix and vouting count
         dens_map = np.zeros( (heith, width), dtype = np.float32 )   # Init density to 0
@@ -148,16 +92,23 @@ class KerasPredictor:
             
             # Get all the scaled images
             im_scales = extractEscales([crop_im], self._n_scales)
+            print "im_scales:", len(im_scales), len(im_scales[0]), im_scales[0][0].shape, im_scales[0][0]
             
             # Load and forward CNN
-            for s in range(self._n_scales):
-                data_name = 'data_s{}'.format(s)
-                self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
-            self.net.forward()
+            #for s in range(self._n_scales):                
+            #    data_name = 'data_s{}'.format(s)
+            #    self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
+            #self.net.forward()
             
             # Take the output from the last layer
             # Access to the last layer of the net, second element of the tuple (layer, caffe obj)
-            pred = self.net.blobs.items()[-1][1].data
+            im_input = utl.resizeMaxSize(im_scales[0][0], self.net.input_shape[2])
+            print im_input.shape
+            im_input = np.expand_dims(im_input, axis=0)
+            print im_input.shape
+            #pred = self.net.predict(im_input)
+            #pred = self.net.blobs.items()[-1][1].data
+            assert 1==0
             
             # Make it squared
             p_side = int(np.sqrt( len( pred.flatten() ) )) 
