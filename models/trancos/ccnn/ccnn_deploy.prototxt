@@ -1,10 +1,17 @@
-name: "TRANCOS_CCNN"
-input: "data_s0"
-input_dim: 1
-input_dim: 3
-input_dim: 72
-input_dim: 72
+#name: "TRANCOS_CCNN"
+#input: "data_s0"
+#input_dim: 1
+#input_dim: 3
+#input_dim: 72
+#input_dim: 72
 
+name: "TRANCOS_CCNN"
+layer {
+  name: "data_s0"
+  type: "Input"
+  top: "data_s0"
+  input_param { shape: { dim: 1 dim: 3 dim: 72 dim: 72 } }
+}
 layer {
   name: "conv1"
   type: "Convolution"

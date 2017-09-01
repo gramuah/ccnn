@@ -1,6 +1,6 @@
 import os 
 import glob
-import vigra
+#import vigra
 import numpy as np
 import scipy.io
 from skimage.transform import resize
@@ -240,7 +240,7 @@ def extendName(name, im_folder, use_ending=False, pattern=[]):
         @param pattern: string that will substitute the original file ending. 
         @return new_name: list which contains all the converted names.
     '''    
-    final_name = im_folder + os.path.sep + name
+    final_name = im_folder + name #os.path.sep + name
     
     if use_ending:
         l_dot = final_name.rfind('.')
@@ -268,6 +268,7 @@ def extendImNames(txt_file, im_folder, use_ending=False, pattern=[]):
     
     return names
 
+"""
 def importImagesFolder(im_names, skip=1, stop=-1, verbose=True):
     '''import all images from a folder that follow a certain pattern'''
     
@@ -282,6 +283,7 @@ def importImagesFolder(im_names, skip=1, stop=-1, verbose=True):
             break
     
     return imgs
+"""
 
 def getMasks(fnames):
     

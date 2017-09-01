@@ -31,8 +31,11 @@ import time
 import numpy as np
 import utils as utl
 from gen_features import genDensity, genPDensity, loadImage, extractEscales
-import caffe
+#import caffe
 import cv2
+
+# Keras modules
+from keras.models import load_model
 
 
 #===========================================================================
@@ -53,11 +56,21 @@ class CaffePredictor:
             scale_name = 'data_s{}'.format(s)
             self.net.blobs[scale_name].reshape(b_shape[0],b_shape[1],b_shape[2],b_shape[3])
 
+class KerasPredictor:
+
+    def __init__(self, kerasmodel, n_scales):
+
+        self.net = load_model(kerasmodel)
+        print self.net.summary()
+
+        self._n_scales = n_scales
+
     # Probably it is not the eficient way to do it...
     def process(self, im, base_pw):
         # Compute dense positions where to extract patches
         [heith, width] = im.shape[0:2]
         pos = utl.get_dense_pos(heith, width, base_pw, stride=10)
+        print "pos:", pos
 
         # Initialize density matrix and vouting count
         dens_map = np.zeros( (heith, width), dtype = np.float32 )   # Init density to 0
@@ -79,16 +92,23 @@ class CaffePredictor:
             
             # Get all the scaled images
             im_scales = extractEscales([crop_im], self._n_scales)
+            print "im_scales:", len(im_scales), len(im_scales[0]), im_scales[0][0].shape, im_scales[0][0]
             
             # Load and forward CNN
-            for s in range(self._n_scales):
-                data_name = 'data_s{}'.format(s)
-                self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
-            self.net.forward()
+            #for s in range(self._n_scales):                
+            #    data_name = 'data_s{}'.format(s)
+            #    self.net.blobs[data_name].data[...] = self.transformer.preprocess('data', im_scales[0][s].copy())
+            #self.net.forward()
             
             # Take the output from the last layer
             # Access to the last layer of the net, second element of the tuple (layer, caffe obj)
-            pred = self.net.blobs.items()[-1][1].data
+            im_input = utl.resizeMaxSize(im_scales[0][0], self.net.input_shape[2])
+            print im_input.shape
+            im_input = np.expand_dims(im_input, axis=0)
+            print im_input.shape
+            #pred = self.net.predict(im_input)
+            #pred = self.net.blobs.items()[-1][1].data
+            assert 1==0
             
             # Make it squared
             p_side = int(np.sqrt( len( pred.flatten() ) )) 
@@ -288,7 +308,7 @@ def main(argv):
     print "Dataset: ", dataset
     print "Results files: ", results_file
     print "Test data base location: ", im_folder
-    print "Test inmage names: ", test_names_file
+    print "Test image names: ", test_names_file
     print "Dot image ending: ", dot_ending
     print "Use mask: ", use_mask
     print "Mask pattern: ", mask_file
@@ -301,12 +321,14 @@ def main(argv):
     print "Caffemodel path: ", caffemodel_path
     print "Batch size: ", b_size
     print "Resize images: ", resize_im
+    print "Colored: ", is_colored
     print "==================="
     
     print "----------------------"
     print "Preparing for Testing"
     print "======================"
     
+    """
     # Set GPU CPU setting
     if use_cpu:
         caffe.set_mode_cpu()
@@ -314,6 +336,7 @@ def main(argv):
         # Use GPU
         caffe.set_device(gpu_dev)
         caffe.set_mode_gpu()
+    """
 
     print "Reading perspective file"
     if use_perspective:
@@ -341,22 +364,27 @@ def main(argv):
     game_table = np.zeros( (n_im, mx_game) )
     
     # Init CNN
-    CNN = CaffePredictor(prototxt_path, caffemodel_path, n_scales)
+    #CNN = CaffePredictor(prototxt_path, caffemodel_path, n_scales)
+    CNN = KerasPredictor("models/pretrained_models/trancos/ccnn/trancos_ccnn_keras.h5", n_scales)
     
-    print 
+    print ""
     print "Start prediction ..."
     count = 0
     gt_vector = np.zeros((len(im_names)))
     pred_vector = np.zeros((len(im_names)))    
     
     for ix, name in enumerate(im_names):
+        
         # Get image paths
         im_path = utl.extendName(name, im_folder)
         dot_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=dot_ending)
-
+        
         # Read image files
+        print "Test image:", im_path
         im = loadImage(im_path, color = is_colored)
+        print "Shape of test image:", im.shape
         dot_im = loadImage(dot_im_path, color = True)
+        print "Shape of dot image:", dot_im.shape
         
         # Generate features
         if use_perspective:
@@ -377,6 +405,7 @@ def main(argv):
                 mask_im_path = utl.extendName(name, im_folder, use_ending=True, pattern=mask_file)
                 mask = sio.loadmat(mask_im_path, chars_as_strings=1, matlab_compatible=1)
                 mask = mask.get('BW')
+                print "Shape of Mask:", mask.shape
         
         s=time.time()
         ntrue,npred,resImg,gtdots=testOnImg(CNN, im, dens_im, pw, mask)
