@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Download dataset
-wget http://crcv.ucf.edu/data/UCFCrowdCountingDataset_CVPR13.rar
+wget http://crcv.ucf.edu/data/ucf-cc-50/UCFCrowdCountingDataset_CVPR13.rar
 
 # Extract
 mkdir UCFCrowdCountingDataset_CVPR13
