@@ -1,10 +1,10 @@
 # Towards perspective-free object counting with deep learning
 
-By [Daniel Oñoro-Rubio](https://es.linkedin.com/in/daniel-oñoro-71062756) and [Roberto J. López-Sastre](http://agamenon.tsc.uah.es/Personales/rlopez/).
+By [Daniel Oñoro-Rubio](https://es.linkedin.com/in/daniel-oñoro-71062756) and [Roberto J. López-Sastre](https://gram.web.uah.es/people/rober/).
 
 GRAM, University of Alcalá, Alcalá de Henares, Spain.
 
-This is the official code implementation of the work described in our [ECCV 2016 paper](http://agamenon.tsc.uah.es/Investigacion/gram/publications/eccv2016-onoro.pdf). 
+This is the official code implementation of the work described in our [ECCV 2016 paper](https://gram.web.uah.es/data/publications/eccv2016-onoro.pdf). 
 
 
 This repository provides the implementation of CCNN and Hydra models for object counting.
@@ -77,7 +77,7 @@ This code allows the usage of CPU and GPU, but we strongly recommend the usage o
     
 ### Demo
 
-We here provide a demo consisting in predicting the number of vehicles in the test images of the [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/), which was used in our ECCV paper. 
+We here provide a demo consisting in predicting the number of vehicles in the test images of the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html), which was used in our ECCV paper. 
 
 This demo uses the CCNN model described in the paper. The results reported in the paper can be reproduced with this demo.
 
@@ -108,7 +108,7 @@ We provide here the scripts needed to **train** and **test** all the models (CCN
 
 In order to download and setup a dataset we recommend to use our scripts. To do so, just place yourself in the $PROJECT directory and run one of the following scripts:
 
-* [TRANCOS dataset](http://agamenon.tsc.uah.es/Personales/rlopez/data/trancos/):
+* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html):
  
 	```Shell
     ./tools/get_trancos.sh
