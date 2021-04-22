@@ -100,11 +100,7 @@ We provide here the scripts needed to **train** and **test** all the models (CCN
 
 In order to download and setup a dataset we recommend to use our scripts. To do so, just place yourself in the $PROJECT directory and run one of the following scripts:
 
-* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html):
- 
-	```Shell
-    ./tools/get_trancos.sh
-    ```
+* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html): [tools/get_trancos_model.md](tools/get_trancos_model.md) 
 
 * [UCSD dataset](http://www.svcl.ucsd.edu/projects/peoplecnt/):
 
