@@ -85,10 +85,7 @@ To run the demo, these are the steps to follow:
 
 1. Download the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html) and extract it in the path `data/TRANCOS`.	
 
-2. Download our TRANCOS CCNN pretrained model.
-	```Shell
-	./tools/get_trancos_model.sh
-	```
+2. Download our TRANCOS CCNN pretrained model. Follow the instructions in [tools/get_trancos_model.md](tools/get_trancos_model.md)	
 
 3. Finally, to run the demo, simply execute the following command:
 	```Shell
