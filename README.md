@@ -107,7 +107,6 @@ In order to download and setup a dataset we recommend to follow these instructio
 	```Shell
     ./tools/get_ucsd.sh
     ```
-
 * [UCF dataset](http://crcv.ucf.edu/data/crowd_counting.php): just place yourself in the $PROJECT directory and run the following script
 
 	```Shell
@@ -119,12 +118,11 @@ In order to download and setup a dataset we recommend to follow these instructio
 
 #### Download pre-trained models
 
-All our pre-trained models can be downloaded using the corresponding script:
+All our pre-trained models can be downloaded following these instructions:
+  *[TRANCOS Models](tools/get_all_trancos_models.md)
+  *[UCSD Models](tools/get_all_ucsd_models.md)
+  *[UCF Models](tools/get_all_ucf_models.md)
 
-	```Shell
-    ./tools/get_all_DATASET_CHOSEN_models.sh
-    ```
-Simply substitute DATASET_CHOSEN by: trancos, ucsd or ucf.
 
 #### Test the pretrained models
 1. Edit the corresponding script $PROJECT/experiments/scripts/DATASET_CHOSEN_test_pretrained.sh
