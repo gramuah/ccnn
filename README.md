@@ -128,9 +128,10 @@ All our pre-trained models can be downloaded following these instructions:
 
 2. Run the corresponding scripts.
 
-       ```Shell
-    ./experiments/scripts/DATASET_CHOSEN_test_pretrained.sh
-    ```
+```Shell
+./experiments/scripts/DATASET_CHOSEN_test_pretrained.sh
+```
+
 Note that this pretrained models will let you reproduce the results in our paper.
 
 
@@ -139,10 +140,9 @@ Note that this pretrained models will let you reproduce the results in our paper
 1. Edit the launching script (e.g.: $PROJECT/experiments/scripts/DATASET_CHOSEN_train_test.sh).
 
 2. Place you in $PROJECT folder and run the launching script by typing:
-
-	```Shell
-    ./experiments/scripts/DATASET_CHOSEN_train_test.sh
-    ```
+```Shell
+./experiments/scripts/DATASET_CHOSEN_train_test.sh
+```
 
 
 ### Remarks
