@@ -85,7 +85,7 @@ To run the demo, these are the steps to follow:
 
 1. Download the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html) and extract it in the path `data/TRANCOS`.	
 
-2. Download our TRANCOS CCNN pretrained model. Follow the instructions in [tools/get_trancos_model.md](tools/get_trancos_model.md)	
+2. Download our TRANCOS CCNN pretrained model. Follow the instructions detailed [here](tools/get_trancos_model.md)	
 
 3. Finally, to run the demo, simply execute the following command:
 	```Shell
@@ -98,17 +98,17 @@ We provide here the scripts needed to **train** and **test** all the models (CCN
 
 #### Download a dataset
 
-In order to download and setup a dataset we recommend to use our scripts. To do so, just place yourself in the $PROJECT directory and run one of the following scripts:
+In order to download and setup a dataset we recommend to follow these instructions: 
 
-* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html): [tools/get_trancos_model.md](tools/get_trancos_model.md) 
+* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html): Follow [these instructions](tools/get_trancos_model.md) 
 
-* [UCSD dataset](http://www.svcl.ucsd.edu/projects/peoplecnt/):
+* [UCSD dataset](http://www.svcl.ucsd.edu/projects/peoplecnt/): just place yourself in the $PROJECT directory and run the following script
 
 	```Shell
     ./tools/get_ucsd.sh
     ```
 
-* [UCF dataset](http://crcv.ucf.edu/data/crowd_counting.php):
+* [UCF dataset](http://crcv.ucf.edu/data/crowd_counting.php): just place yourself in the $PROJECT directory and run the following script
 
 	```Shell
     ./tools/get_ucf.sh
