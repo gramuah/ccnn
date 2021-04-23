@@ -1,15 +1,18 @@
-#! /bin/bash
-
-
 # Download all the pretrained models using the UCF dataset
 
-# Create dir
+Follow these instructions:
+
+1. Download all the models in [this fhared folder](https://universidaddealcala-my.sharepoint.com/:f:/g/personal/gram_uah_es/EkrXzZVeEqZKpiN7GtZNP6EBfYOACzFsTyY6rehtwiwatQ?e=SskaLd).
+2. Create the following dirs
+
+```
 mkdir models/pretrained_models/ucf
 mkdir models/pretrained_models/ucf/ccnn
 mkdir models/pretrained_models/ucf/hydra2
 mkdir models/pretrained_models/ucf/hydra3
-
-# Download, untar, move and clean
+```
+3. Organize the files (untar the files, move and clean)
+```
 for FOLD_NUM in 0 1 2 3 4
 do
   # Form tar files names
@@ -20,22 +23,20 @@ do
   HYDRA3_TAR=ucf_hydra3_${FOLD_NUM}.caffemodel.tar.gz
   HYDRA3_MODEL=ucf_hydra3_${FOLD_NUM}.caffemodel
 
-  # Get CCNN models
-  wget http://agamenon.tsc.uah.es/Personales/rlopez/data/ccnn/${CCNN_TAR}
+  #CCNN models
   tar -zxvf ${CCNN_TAR}
   mv ${CCNN_MODEL} models/pretrained_models/ucf/ccnn
   rm ${CCNN_TAR}
 
-  # Get Hydra2 models
-  wget http://agamenon.tsc.uah.es/Personales/rlopez/data/ccnn/${HYDRA2_TAR}
+  #Hydra2 models
   tar -zxvf ${HYDRA2_TAR}
   mv ${HYDRA2_MODEL} models/pretrained_models/ucf/hydra2
   rm ${HYDRA2_TAR}
 
-  # Get Hydra3 models
-  wget http://agamenon.tsc.uah.es/Personales/rlopez/data/ccnn/${HYDRA3_TAR}
+  #Hydra3 models
   tar -zxvf ${HYDRA3_TAR}
   mv ${HYDRA3_MODEL} models/pretrained_models/ucf/hydra3
   rm ${HYDRA3_TAR}
 
 done
+```
