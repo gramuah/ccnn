@@ -1,8 +1,8 @@
-# Download all the pretrained models using the TRANCOS dataset
+# Download all the pre-trained models using the TRANCOS dataset
 
 Follow these instructions
 
-1. Create the following dir
+1. Create the following dir:
 
 ```
 mkdir models/pretrained_models/trancos

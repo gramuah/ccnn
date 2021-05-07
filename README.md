@@ -4,7 +4,7 @@ By [Daniel Oñoro-Rubio](https://es.linkedin.com/in/daniel-oñoro-71062756) and 
 
 GRAM, University of Alcalá, Alcalá de Henares, Spain.
 
-This is the official code implementation of the work described in our [ECCV 2016 paper](https://gram.web.uah.es/data/publications/eccv2016-onoro.pdf). 
+This is the official code repository of the work described in our [ECCV 2016 paper](https://gram.web.uah.es/data/publications/eccv2016-onoro.pdf). 
 
 
 This repository provides the implementation of CCNN and Hydra models for object counting.
@@ -77,39 +77,39 @@ This code allows the usage of CPU and GPU, but we strongly recommend the usage o
     
 ### Demo
 
-We here provide a demo consisting in predicting the number of vehicles in the test images of the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html), which was used in our ECCV paper. 
+Here, we provide a demo for predicting the number of vehicles in the test images of the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html), which was used in our ECCV paper. 
 
 This demo uses the CCNN model described in the paper. The results reported in the paper can be reproduced with this demo.
 
 To run the demo, these are the steps to follow:
 
-1. Download the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html) and extract it in the path `data/TRANCOS`.	
+1. Download the [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html) and extract it in the path `data/TRANCOS`. 
 
-2. Download our TRANCOS CCNN pretrained model. Follow the instructions detailed [here](tools/get_trancos_model.md)	
+2. Download our TRANCOS CCNN pretrained model. Follow the instructions detailed [here](tools/get_trancos_model.md) 
 
 3. Finally, to run the demo, simply execute the following command:
-	```Shell
-	./tools/demo.sh
-	```
+   ```Shell
+   ./tools/demo.sh
+   ```
 
 ### How to reproduce the results of the paper?
 
-We provide here the scripts needed to **train** and **test** all the models (CCNN and Hydra) with the datasets used in our ECCV paper. These are the steps to follow.
+We provide the scripts needed to **train** and **test** our models (CCNN and Hydra) on the datasets used in our ECCV paper. These are the steps to follow:
 
 #### Download a dataset
 
-In order to download and setup a dataset we recommend to follow these instructions: 
+To download and set up a dataset we recommend following these instructions: 
 
-* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html): Download it using this [direct link](https://universidaddealcala-my.sharepoint.com/:u:/g/personal/gram_uah_es/Eank6osXQgxEqa-1bb0nVsoBc3xO4XDwENc_g0nc6t58BA?&Download=1), and extract the file in the path `data/TRANCOS`.	
+* [TRANCOS dataset](https://gram.web.uah.es/data/datasets/trancos/index.html): Download it using this [direct link](https://universidaddealcala-my.sharepoint.com/:u:/g/personal/gram_uah_es/Eank6osXQgxEqa-1bb0nVsoBc3xO4XDwENc_g0nc6t58BA?&Download=1), and extract the file in the path `data/TRANCOS`. 
 
 * [UCSD dataset](http://www.svcl.ucsd.edu/projects/peoplecnt/): just place yourself in the $PROJECT directory and run the following script
 
-	```Shell
+   ```Shell
     ./tools/get_ucsd.sh
     ```
 * [UCF dataset](http://crcv.ucf.edu/data/crowd_counting.php): just place yourself in the $PROJECT directory and run the following script
 
-	```Shell
+   ```Shell
     ./tools/get_ucf.sh
     ```
 
@@ -132,7 +132,7 @@ All our pre-trained models can be downloaded following these instructions:
 ./experiments/scripts/DATASET_CHOSEN_test_pretrained.sh
 ```
 
-Note that this pretrained models will let you reproduce the results in our paper.
+Note that the pre-trained models will let you reproduce the results in our paper.
 
 
 #### Train/test the model chosen
@@ -147,7 +147,7 @@ Note that this pretrained models will let you reproduce the results in our paper
 
 ### Remarks
 
-In order to provide a better distribution, this repository *unifies and reimplements* in Python some of the original modules. Due to these changes in the libraries used, the results produced by this software might be slightly different from the ones reported in the paper.
+To provide a better distribution, this repository *unifies and reimplements* in Python some of the original modules. Due to these changes in the libraries used, the results produced by this software might be slightly different from the ones reported in the paper.
 
 
 ### Acknowledgements
