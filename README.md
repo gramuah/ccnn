@@ -40,8 +40,9 @@ The license information of this project is described in the file "LICENSE.txt".
 
 1. Use a Linux distribution. We have developed and tested the code on [Ubuntu](http://www.ubuntu.com/).
 
+2. [Python 2.7](https://www.python.org/download/releases/2.7/).
 
-2. Requirements for `Caffe` and `pycaffe`. Follow the [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html).
+3. Requirements for `Caffe` and `pycaffe`. Follow the [Caffe installation instructions](http://caffe.berkeleyvision.org/installation.html).
 
   **Note:** Caffe *must* be built with support for Python layers!
 
@@ -50,7 +51,7 @@ The license information of this project is described in the file "LICENSE.txt".
   WITH_PYTHON_LAYER := 1
   ```
 
-3. Python packages you need: `cython`, `python-opencv`, `python-h5py`, `easydict`, `pillow (version >= 3.4.2)`.
+4. Python packages you need: `cython`, `python-opencv`, `python-h5py`, `easydict`, `pillow (version >= 3.4.2)`.
 
 
 ### Requirements: hardware
